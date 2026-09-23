@@ -203,8 +203,9 @@ bodies through the agent, which records them, applies rules and passes them on.
 ## Development
 
 This repository owns the VS Code extension and React webview. Capture logic and
-shared protocol types live in [agent](https://github.com/heimspy/agent); the pinned sing-box fork build lives in [core](https://github.com/heimspy/core).
-Requires Node 24, Go (pinned in the installed agent's `core-lock.json`), and Git.
+shared protocol types live in [agent](https://github.com/heimspy/agent). This repository
+also builds the pinned sing-box fork.
+Requires Node 24, Go (pinned in `sing-box.lock.json`), and Git.
 
 ```sh
 git clone https://github.com/heimspy/vscode.git
@@ -220,8 +221,9 @@ npm run test:e2e
 npm run package
 ```
 
-The agent dependency is pinned to a full Git commit; its build helper fetches the
-exact core commit. No sibling repositories are needed. VSIX still bundles the agent
+The agent dependency and `sing-box.lock.json` pin full Git commits;
+`npm run core:build` builds the fork directly. No sibling repositories are needed.
+VSIX still bundles the agent
 and core. F5 launches the extension host. See [repository boundaries](docs/repositories.md).
 
 ## Releasing

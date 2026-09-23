@@ -609,12 +609,11 @@
         }
     },
     "scripts": {
-        "core:build": "node node_modules/@heimspy/agent/scripts/build-core.mjs",
-        "core:test": "node node_modules/@heimspy/agent/scripts/build-core.mjs --test",
+        "core:build": "node scripts/build-core.mjs",
         "build": "node esbuild.mjs",
         "watch": "node esbuild.mjs --watch",
         "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p src/webview/tsconfig.json",
-        "test": "vitest run",
+        "test": "node --test scripts/build-core.test.mjs && vitest run",
         "format": "prettier --write src scripts/*.mjs esbuild.mjs package.json",
         "format:check": "prettier --check src scripts/*.mjs esbuild.mjs package.json",
         "package": "node scripts/package.mjs",
@@ -652,6 +651,6 @@
         "theme": "dark"
     },
     "dependencies": {
-        "@heimspy/agent": "git+https://github.com/heimspy/agent.git#989dab7904cd61265ff723fc1b0b193b19ee127d"
+        "@heimspy/agent": "git+https://github.com/heimspy/agent.git#45238bcee6f3099f8f409f979923e7172a66feda"
     }
 }

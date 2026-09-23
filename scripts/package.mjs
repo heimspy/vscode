@@ -9,6 +9,7 @@ import { parseArgs } from 'node:util'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const { version } = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'))
+const pin = JSON.parse(readFileSync(join(ROOT, 'sing-box.lock.json'), 'utf8'))
 const ALL = ['darwin-arm64', 'darwin-x64', 'linux-x64', 'linux-arm64', 'win32-x64', 'win32-arm64']
 const { values } = parseArgs({
     options: {
@@ -28,8 +29,15 @@ run('node', ['esbuild.mjs'])
 mkdirSync(join(ROOT, 'core'), { recursive: true })
 for (const target of targets) {
     const source = join(ROOT, 'core', target)
-    if (!existsSync(source))
-        run('node', ['node_modules/@heimspy/agent/scripts/build-core.mjs', '--target', target])
+    const binary = join(source, target.startsWith('win32-') ? 'sing-box.exe' : 'sing-box')
+    let manifest
+    try {
+        manifest = JSON.parse(readFileSync(binary + '.build.json', 'utf8'))
+    } catch {
+        // Missing or invalid metadata requires a build at the current pin.
+    }
+    if (!existsSync(binary) || manifest?.revision !== pin.revision || manifest?.target !== target)
+        run('node', ['scripts/build-core.mjs', '--target', target])
     const staged = []
     try {
         for (const name of readdirSync(source)) {

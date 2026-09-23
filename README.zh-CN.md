@@ -175,9 +175,8 @@ sing-box 用 Heimspy CA 签发的叶证书终止 TLS，把正文流式传给 age
 ## 开发
 
 本仓库维护 VS Code 扩展与 React 界面；抓包服务、MCP 和公共协议由
-[agent](https://github.com/heimspy/agent) 维护；sing-box fork 的构建由
-[core](https://github.com/heimspy/core) 维护。需要 Node 24、Git 和 Go
-（版本见安装后的 agent 包中的 `core-lock.json`）。
+[agent](https://github.com/heimspy/agent) 维护；sing-box fork 的构建由本仓库维护。需要 Node 24、Git 和 Go
+（版本见本仓库的 `sing-box.lock.json`）。
 
 ```sh
 git clone https://github.com/heimspy/vscode.git
@@ -193,7 +192,7 @@ npm run test:e2e
 npm run package
 ```
 
-agent 依赖固定到完整 Git 提交，其构建脚本再获取固定版本的 core；不需要同级目录中的其他仓库。
+agent 依赖和 `sing-box.lock.json` 均固定到完整 Git 提交；本仓库直接构建 sing-box，无需 core 仓库或同级目录。
 VSIX 仍包含 agent 和内核，用户只需安装扩展。按 F5 启动扩展开发宿主。
 更新和联调见[仓库边界](docs/repositories.md)。
 

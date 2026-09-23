@@ -2,39 +2,42 @@
 
 | Repository | Ownership |
 | --- | --- |
-| [heimspy/vscode](https://github.com/heimspy/vscode) | Extension, React webview, UI preferences, VSIX, Marketplace/Open VSX |
-| [heimspy/agent](https://github.com/heimspy/agent) | Node service, capture policies, MCP, model/protocol, integration helpers |
-| [heimspy/core](https://github.com/heimspy/core) | Fork pin, native build/test/release |
-| [heimspy/sing-box](https://github.com/heimspy/sing-box) | Upstream fork and Heimspy inspector source |
+| [heimspy/vscode](https://github.com/heimspy/vscode) | Extension, React webview, agent/core assembly, platform builds, licenses, VSIX and store releases |
+| [heimspy/agent](https://github.com/heimspy/agent) | Node service, capture policies, MCP, model/protocol and integration tests |
+| [heimspy/sing-box](https://github.com/heimspy/sing-box) | Upstream fork, inspector source, Go race tests, vet and dependency scan |
 
-Dependencies run vscode → agent → core → the independent [sing-box fork](https://github.com/heimspy/sing-box). Shared code is imported from agent's package
-exports, not copied. The agent's `core-lock.json` pins a full core commit and toolchain.
-The extension bundles the agent with its own independent version. The display name and internal protocols use Heimspy. The extension ID `fqix.tapline`,
-command/setting/view IDs and existing CA storage are preserved for compatibility.
+Vscode pins agent in package.json/package-lock.json and the fork independently in
+`sing-box.lock.json`. Its `scripts/build-core.mjs` fetches that exact fork revision
+and writes the binary, source/hash manifest and notices to `core/<platform>-<arch>`.
+`HEIMSPY_SING_BOX_SOURCE` selects a clean local checkout at the pinned revision.
+The fork cache is under `.build/sing-box/<sha>`; no embedded source or submodule is used.
+
+Agent has its own `sing-box.lock.json` for integration tests. Its `test:core` script
+builds a local fixture only, not distribution artifacts. It has no dependency on
+vscode or the removed core repository. Active builds fetch the sing-box fork directly.
+
+The display name is Heimspy; extension ID `fqix.tapline`, command/setting/view IDs
+and existing CA storage are preserved. Agent and extension versions are independent.
 
 ## Updating
 
-1. Commit and test changes on the sing-box fork, then update the core source pin and test/release core.
-2. Update agent's `core-lock.json` to that SHA and toolchain, then run `core:build`,
-   `build`, `typecheck`, `test` and `core:test`.
-3. Commit the tested agent version. In vscode, update `@heimspy/agent` to
-   `git+https://github.com/heimspy/agent.git#<full-sha>` and regenerate the lockfile
-   with `npm install --package-lock-only --ignore-scripts`.
-4. Run extension typechecks, build, tests, core build and E2E; package and release the VSIX.
+1. Commit/test fork changes with `bash scripts/test-heimspy.sh` in sing-box.
+2. Update agent's test pin, run `test:core`, typecheck, build and tests, then commit.
+3. In vscode, pin the tested agent Git SHA and update its own sing-box.lock.json.
+   Regenerate package-lock.json with `npm install --package-lock-only --ignore-scripts`.
+4. Run `core:build`, typecheck, build, tests, E2E and package in vscode.
+   Publish a GitHub release to run the existing Marketplace/Open VSX workflow.
 
-For local development, `npm pack` in agent and install that tarball in vscode with
-`npm install --no-save --package-lock=false /absolute/path/to/package.tgz`.
-Restore using `npm ci --ignore-scripts`. Use `HEIMSPY_CORE_SOURCE` for a local core
-checkout whose HEAD matches the pin; `HEIMSPY_SING_BOX_SOURCE` similarly selects a
-clean fork checkout at the core pin.
+For local agent development, `npm pack` in agent and install that tarball in vscode
+with `npm install --no-save --package-lock=false /absolute/path/to/package.tgz`.
+Restore using `npm ci --ignore-scripts`.
 
-## Migration and publishing
+## History and publication
 
-Relevant Git history was extracted from `heimspy/heimspy` at `7478a34`. Filtering
-changes commit IDs. The original repository retains all history and old release
-tags; old tags are not copied here.
+Relevant Git history was extracted from `heimspy/heimspy` at `7478a34`; the original
+repository retains the complete history and old tags. The native build script was
+subsequently migrated from core to vscode; the separate core repository was removed.
 
-Before publishing extensions, configure this repository's `marketplace-publish`
-environment, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `OVSX_PAT` and Azure federated
-identity subject for this repository/environment. Credentials and account-side
-trust do not migrate with Git history. Normal pushes only run CI.
+Store publication requires the vscode repository's `marketplace-publish` environment,
+`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `OVSX_PAT` and the corresponding Azure federated
+identity subject. Normal pushes only run CI, not store publication.
