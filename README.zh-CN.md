@@ -1,4 +1,4 @@
-# Tapline
+# Heimspy
 
 [English](README.md) | 简体中文
 
@@ -6,16 +6,16 @@
 [![Open VSX downloads](https://img.shields.io/open-vsx/dt/fqix/tapline?label=Open%20VSX%20downloads)](https://open-vsx.org/extension/fqix/tapline)
 
 不离开 VS Code 即可捕获、检查、改写和重放 HTTP、HTTPS、HTTP/2、HTTP/3、gRPC、WebSocket
-和 SSE 流量。集成终端和调试会话经由本地代理转发，使用 Tapline 根 CA 解密选中的域名。
+和 SSE 流量。集成终端和调试会话经由本地代理转发，使用 Heimspy 根 CA 解密选中的域名。
 默认选中全部主机，被排除的主机原样透传。
 
 从 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fqix.tapline)
 或 [Open VSX](https://open-vsx.org/extension/fqix/tapline) 安装。
 
-![Tapline：证书安装、HTTP 抓包、重发、Diff 与 gRPC 字段解析](docs/demo/tapline-walkthrough.gif)
+![Heimspy：证书安装、HTTP 抓包、重发、Diff 与 gRPC 字段解析](docs/demo/heimspy-walkthrough.gif)
 
 _安装并信任 CA，抓取 httpbin 请求，编辑并重发，与原请求 Diff，再用工作区的 `.proto`
-解出 grpcbin 的字段名。_ [MP4](docs/demo/tapline-walkthrough.mp4) ·
+解出 grpcbin 的字段名。_ [MP4](docs/demo/heimspy-walkthrough.mp4) ·
 [录制说明](docs/demo/README.md)
 
 ## 功能
@@ -50,7 +50,7 @@ _安装并信任 CA，抓取 httpbin 请求，编辑并重发，与原请求 Dif
 
 ## 编写请求
 
-打开 _Tapline: 新建请求…_，将 cURL 命令粘贴到编辑器，或使用顶部的 _cURL_ 导入按钮。
+打开 _Heimspy: 新建请求…_，将 cURL 命令粘贴到编辑器，或使用顶部的 _cURL_ 导入按钮。
 解析使用 curlconverter，支持多行命令和 UTF-8 数据文件，例如
 `curl -d @data.json https://example.com/api`。发送前请查看导入警告：文件缺失、multipart
 文件引用及无法映射的传输选项都会提示；上传二进制文件请在 Body 中选择文件。
@@ -68,7 +68,7 @@ _安装并信任 CA，抓取 httpbin 请求，编辑并重发，与原请求 Dif
 
 ## 设置
 
-_Tapline: 设置_（或流量面板的齿轮）打开带搜索的设置标签页。设置和规则保存在扩展的
+_Heimspy: 设置_（或流量面板的齿轮）打开带搜索的设置标签页。设置和规则保存在扩展的
 全局存储中，同一 VS Code 配置文件下的所有项目共用，不写入 `settings.json`。
 
 | 设置项                                      | 默认值           | 作用                               |
@@ -79,12 +79,12 @@ _Tapline: 设置_（或流量面板的齿轮）打开带搜索的设置标签页
 | `tapline.maxEntries` / `tapline.maxBodyKiB` | `2000` / `512`   | 保留的请求数与正文字节数           |
 | `tapline.mcp.enabled` / `tapline.mcp.port`  | `true` / `3607`  | 供 AI 助手使用的 MCP 端点          |
 | `tapline.grpc.protoFiles`                   | `["**/*.proto"]` | 解码 gRPC 消息用的 schema          |
-| `tapline.rules`                             | `[]`             | 拦截规则，用 _Tapline: 规则…_ 编辑 |
+| `tapline.rules`                             | `[]`             | 拦截规则，用 _Heimspy: 规则…_ 编辑 |
 
 ## 规则
 
 规则按顺序应用于 URL 匹配通配模式（`*` 匹配任意内容，不含 `*` 时按前缀匹配，留空匹配
-全部）且方法匹配（可选）的每个请求。点击尺子按钮或 _Tapline: 规则…_ 打开编辑器；行的
+全部）且方法匹配（可选）的每个请求。点击尺子按钮或 _Heimspy: 规则…_ 打开编辑器；行的
 右键菜单中的 _在此 URL 上设置断点_ 直接添加断点。规则数据示例：
 
 ```jsonc
@@ -126,8 +126,8 @@ _Tapline: 设置_（或流量面板的齿轮）打开带搜索的设置标签页
 
 ## 根证书
 
-CA 位于扩展的全局存储目录（_Tapline: 复制根证书路径_）。只有系统信任了 CA 才会开始
-抓包；侧边栏和状态栏会提示安装，_Tapline: 卸载根证书_ 可将其移除。
+CA 位于扩展的全局存储目录（_Heimspy: 复制根证书路径_）。只有系统信任了 CA 才会开始
+抓包；侧边栏和状态栏会提示安装，_Heimspy: 卸载根证书_ 可将其移除。
 
 | 平台    | 证书存储                                              |
 | ------- | ----------------------------------------------------- |
@@ -138,7 +138,7 @@ CA 位于扩展的全局存储目录（_Tapline: 复制根证书路径_）。只
 Firefox 和 snap/flatpak 浏览器使用自己的证书存储，需要手动导入。将
 `tapline.ssl.hosts` 设为 `[]` 可在不解密、不安装证书的情况下抓包。
 
-TLS 解密按域名启用和排除。与 Charles 默认不解密不同，Tapline 保留
+TLS 解密按域名启用和排除。与 Charles 默认不解密不同，Heimspy 保留
 `tapline.ssl.hosts = ["*"]`，默认解密全部主机。设为 `[]` 或排除指定域名后，
 对应 HTTPS/WSS 连接原样透传，列表标记**未解密**，只记录连接信息和字节数。客户端看到服务端原始证书，
 包括启用 SSL pinning 的客户端。未配置解密域名时，终端和调试会话只注入代理配置，
@@ -150,46 +150,52 @@ TLS 解密按域名启用和排除。与 Charles 默认不解密不同，Tapline
 Composer/重放是主动发出的检查请求，仅解密自身连接，不改变其他客户端的域名策略。
 
 主动开启解密后遇到 TLS 错误，不自动重试或改为透传。请提前排除有 pinning 的域名。
-Tapline 使用 Go TLS，无法保证与 Charles 对异常证书的接受范围完全相同；
+Heimspy 使用 Go TLS，无法保证与 Charles 对异常证书的接受范围完全相同；
 `ssl.insecureUpstream` 也不能绕过证书格式解析错误。
 
 ## MCP 服务器
 
-只要有窗口加载了 Tapline，抓包代理就在 `http://127.0.0.1:3607/mcp` 提供
+只要有窗口加载了 Heimspy，抓包代理就在 `http://127.0.0.1:3607/mcp` 提供
 [MCP](https://modelcontextprotocol.io) 端点（Streamable HTTP，仅监听本地回环，无额外
 进程）。工具：`list_sessions`、`status`、`list_requests`、`search`、`get_request`、
 `get_body`、`replay`、`send`、`export_har`、`start_capture`、`stop_capture`、
-`set_recording`、`clear`、`delete`；资源 `tapline://sessions/{sessionId}/requests/{id}`。
+`set_recording`、`clear`、`delete`；资源 `heimspy://sessions/{sessionId}/requests/{id}`。
 窗口隔离下每个窗口是一个会话：`list_sessions` 列出它们，其他工具接受 `sessionId`
 （多个窗口时必填）。
 
-_Tapline: 配置 MCP 服务器…_ 提供一键安装到 Cursor、复制 URL、`mcp.json` 片段或
+_Heimspy: 配置 MCP 服务器…_ 提供一键安装到 Cursor、复制 URL、`mcp.json` 片段或
 `claude mcp add` 命令。
 
 ## 工作原理
 
-Node agent 驱动随扩展打包的、打了补丁的 [sing-box](third_party/patches/sing-box/README.md)：
-sing-box 用 Tapline CA 签发的叶证书终止 TLS，把正文流式传给 agent，后者记录、应用规则
+Node agent 驱动随扩展打包的、打了补丁的 [sing-box](https://github.com/heimspy/sing-box/blob/heimspy/service/heimspyinspector/README.md)：
+sing-box 用 Heimspy CA 签发的叶证书终止 TLS，把正文流式传给 agent，后者记录、应用规则
 后转发。
 
 ## 开发
 
-需要 Node 24 LTS、Go 1.27+ 和 git。
+本仓库维护 VS Code 扩展与 React 界面；抓包服务、MCP 和公共协议由
+[agent](https://github.com/heimspy/agent) 维护；sing-box fork 的构建由
+[core](https://github.com/heimspy/core) 维护。需要 Node 24、Git 和 Go
+（版本见安装后的 agent 包中的 `core-lock.json`）。
 
 ```sh
-git clone --recurse-submodules https://github.com/fqix/tapline.git && cd tapline
-nvm use               # Node 24 LTS (.nvmrc)
-npm ci --ignore-scripts # 使用 WASM 解析器，跳过未使用的原生插件
+git clone https://github.com/heimspy/vscode.git
+cd vscode
+nvm use
+npm ci --ignore-scripts
 npm rebuild esbuild
-npm run core:build     # 打补丁并构建 sing-box 到 core/<platform>-<arch>/
-npm run build          # esbuild → dist/
-npm test               # vitest：单元测试 + 针对核心的集成测试
-npm run test:e2e       # 在真实 VS Code 中运行扩展（首次运行会下载 VS Code）
-npm run package        # 当前平台的 VSIX（package:all 构建全部六个）
+npm run core:build
+npm run typecheck
+npm run build
+npm test
+npm run test:e2e
+npm run package
 ```
 
-按 F5 启动扩展开发宿主。CI 在每次 push 时构建、测试并打包所有平台，并在每个操作系统的
-一台 runner 上运行端到端测试。
+agent 依赖固定到完整 Git 提交，其构建脚本再获取固定版本的 core；不需要同级目录中的其他仓库。
+VSIX 仍包含 agent 和内核，用户只需安装扩展。按 F5 启动扩展开发宿主。
+更新和联调见[仓库边界](docs/repositories.md)。
 
 ## 发版
 

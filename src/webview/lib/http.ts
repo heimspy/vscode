@@ -1,5 +1,5 @@
 // Pure helpers for the Contents sub-views: raw messages, hex dumps, cookies, forms.
-import type { Headers, Transaction } from '../../shared/model'
+import type { Headers, Transaction } from '@heimspy/agent/model'
 
 export function contentType(headers: Headers): string {
     return (

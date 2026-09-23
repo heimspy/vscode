@@ -21,10 +21,10 @@ describe('copy proxy environment', () => {
         'preserves spaces, quotes, Unicode and shell expressions in Bash',
         () => {
             const value = "/tmp/中文 user's $(printf injected) `printf injected` \\ ca.pem"
-            const script = shellEnvironment({ TAPLINE_TEST: value }, 'Bash')
+            const script = shellEnvironment({ HEIMSPY_TEST: value }, 'Bash')
             const result = execFileSync(
                 '/bin/bash',
-                ['-c', script + '\nprintf %s "$TAPLINE_TEST"'],
+                ['-c', script + '\nprintf %s "$HEIMSPY_TEST"'],
                 {
                     encoding: 'utf8'
                 }

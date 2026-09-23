@@ -3,7 +3,7 @@ import { jsonTree } from '../../webview/lib/jsonTree'
 
 describe('JSON field/value tree', () => {
     it('keeps array indexes, field names, types and subtree boundaries', () => {
-        const rows = jsonTree('{"items":[{"name":"Tapline","ok":true}],"empty":null}')!
+        const rows = jsonTree('{"items":[{"name":"Heimspy","ok":true}],"empty":null}')!
         expect(rows.map(({ name, depth, kind, end }) => ({ name, depth, kind, end }))).toEqual([
             { name: 'JSON', depth: 0, kind: 'object', end: 5 },
             { name: 'items', depth: 1, kind: 'array', end: 4 },
@@ -12,7 +12,7 @@ describe('JSON field/value tree', () => {
             { name: 'ok', depth: 3, kind: 'boolean', end: 4 },
             { name: 'empty', depth: 1, kind: 'null', end: 5 }
         ])
-        expect(rows[3].value).toBe('Tapline')
+        expect(rows[3].value).toBe('Heimspy')
         expect(rows[4].value).toBe('true')
         expect(rows[5].value).toBe('null')
     })

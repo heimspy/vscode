@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { formatHttpVersion, toCurl, type Transaction } from '../../shared/model'
+import { formatHttpVersion, toCurl, type Transaction } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import { saveState, state, vscode } from '../lib/vscode'
 import type { ComposeDraft } from '../types/messages'

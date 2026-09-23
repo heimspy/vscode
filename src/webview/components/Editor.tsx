@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { type Headers } from '../../shared/model'
+import { type Headers } from '@heimspy/agent/model'
 import { AuthEditor } from './AuthEditor'
 import { AdvancedBody, type BodyUpdate } from './AdvancedBody'
 import { bodyModes, graphqlBody, multipartBody, type BodyDraft, type BodyMode } from '../lib/body'
@@ -208,7 +208,7 @@ export function Editor({
             )
         else if (mode === 'form-data') {
             bodyDraft.parts = [{ name: '', value: '', enabled: true, type: 'text' }]
-            const boundary = `----Tapline${crypto.randomUUID().replace(/-/g, '')}`
+            const boundary = `----Heimspy${crypto.randomUUID().replace(/-/g, '')}`
             setBody(
                 {
                     body: multipartBody(bodyDraft.parts, boundary),

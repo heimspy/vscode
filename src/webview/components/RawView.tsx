@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { pretty, type Transaction } from '../../shared/model'
+import { pretty, type Transaction } from '@heimspy/agent/model'
 import { bodyBytes, isJSON, rawMessage, requestLine, statusLine } from '../lib/http'
 import { t } from '../lib/i18n'
 import { tokenize, type Token } from '../lib/jsonHighlight'

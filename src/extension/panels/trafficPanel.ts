@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises'
 import { isAbsolute, join } from 'node:path'
 import { importCurl } from '../../utils/curl'
 import type { AgentClient } from '../client'
-import type { BreakpointEdit, ComposeRequest, Rule, Transaction } from '../../shared/model'
+import type { BreakpointEdit, ComposeRequest, Rule, Transaction } from '@heimspy/agent/model'
 import { searchTransactions } from '../../utils/search'
 import {
     toRow,
@@ -49,7 +49,7 @@ export interface PanelActions {
 }
 
 /**
- * The single Tapline webview: a sequence table with an inspector for the selected
+ * The single Heimspy webview: a sequence table with an inspector for the selected
  * request. Rows arrive incrementally; the full record is pushed only for the selection.
  */
 export class TrafficPanel implements vscode.Disposable {
@@ -176,7 +176,7 @@ export class TrafficPanel implements vscode.Disposable {
         }
         const panel = (this.panel = vscode.window.createWebviewPanel(
             'tapline.traffic.panel',
-            'Tapline',
+            'Heimspy',
             { viewColumn: column, preserveFocus: true },
             {
                 enableScripts: true,
@@ -312,7 +312,7 @@ export class TrafficPanel implements vscode.Disposable {
         } catch (error) {
             void vscode.window.showErrorMessage(
                 vscode.l10n.t(
-                    'Tapline: {0}',
+                    'Heimspy: {0}',
                     error instanceof Error ? error.message : String(error)
                 )
             )
@@ -331,7 +331,7 @@ export class TrafficPanel implements vscode.Disposable {
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; font-src ${webview.cspSource}; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} data:;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="${asset('webview.css')}">
-<title>Tapline</title>
+<title>Heimspy</title>
 </head>
 <body>
 <div id="root"></div>
@@ -513,7 +513,7 @@ function panelStrings(): Record<string, string> {
         jwtUnverified: vscode.l10n.t('The signature is not verified.'),
         sentTo: vscode.l10n.t('Sent to'),
         rulesApplied: vscode.l10n.t('Rules'),
-        localResponse: vscode.l10n.t('answered by Tapline'),
+        localResponse: vscode.l10n.t('answered by Heimspy'),
         editResend: vscode.l10n.t('Edit & Resend'),
         pausedRequest: vscode.l10n.t('Request paused at a breakpoint — edit it, then continue'),
         pausedResponse: vscode.l10n.t('Response paused at a breakpoint — edit it, then continue'),

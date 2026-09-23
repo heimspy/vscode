@@ -1,4 +1,4 @@
-// h3-probe sends HTTP/3 requests through Tapline's SOCKS5 UDP ASSOCIATE so QUIC
+// h3-probe sends HTTP/3 requests through Heimspy's SOCKS5 UDP ASSOCIATE so QUIC
 // traffic shows up in the panel. curl, Chrome and most clients refuse to run
 // HTTP/3 over a proxy, so a small quic-go client is the simplest end-to-end test.
 //
@@ -23,8 +23,8 @@ import (
 )
 
 func main() {
-	proxy := flag.String("proxy", envOr("TAPLINE_PROXY", "127.0.0.1:3606"), "SOCKS5 proxy host:port (Tapline's mixed listener)")
-	caFile := flag.String("ca", envOr("SSL_CERT_FILE", ""), "PEM file with the Tapline root CA")
+	proxy := flag.String("proxy", envOr("HEIMSPY_PROXY", "127.0.0.1:3606"), "SOCKS5 proxy host:port (Heimspy's mixed listener)")
+	caFile := flag.String("ca", envOr("SSL_CERT_FILE", ""), "PEM file with the Heimspy root CA")
 	insecure := flag.Bool("insecure", false, "skip TLS verification")
 	timeout := flag.Duration("timeout", 20*time.Second, "per-request timeout")
 	flag.Parse()

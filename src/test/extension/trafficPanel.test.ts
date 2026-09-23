@@ -2,7 +2,7 @@ import { afterEach, expect, it, vi } from 'vitest'
 import type * as vscode from 'vscode'
 import type { AgentClient } from '../../extension/client'
 import { TrafficPanel, type PanelActions } from '../../extension/panels/trafficPanel'
-import type { Event, Transaction } from '../../shared/model'
+import type { Event, Transaction } from '@heimspy/agent/model'
 import { toRow, type PanelMessage } from '../../webview/types/messages'
 
 const ui = vi.hoisted(() => ({

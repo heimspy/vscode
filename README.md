@@ -1,4 +1,4 @@
-# Tapline
+# Heimspy
 
 English | [简体中文](README.zh-CN.md)
 
@@ -7,17 +7,17 @@ English | [简体中文](README.zh-CN.md)
 
 Capture, inspect, rewrite and replay HTTP, HTTPS, HTTP/2, HTTP/3, gRPC, WebSocket and
 SSE traffic without leaving VS Code. Integrated terminals and debug sessions are routed
-through a local proxy that decrypts configured hosts with the Tapline root CA.
+through a local proxy that decrypts configured hosts with the Heimspy root CA.
 By default all hosts are selected; excluded hosts pass through unchanged.
 
 Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fqix.tapline)
 or [Open VSX](https://open-vsx.org/extension/fqix/tapline).
 
-![Tapline: certificate setup, HTTP capture, replay, diff and decoded gRPC fields](docs/demo/tapline-walkthrough.gif)
+![Heimspy: certificate setup, HTTP capture, replay, diff and decoded gRPC fields](docs/demo/heimspy-walkthrough.gif)
 
 _Install and trust the CA, capture an httpbin request, edit & resend it, diff it against
 the original, decode grpcbin fields with the workspace `.proto`._
-[MP4](docs/demo/tapline-walkthrough.mp4) · [recording notes](docs/demo/README.md)
+[MP4](docs/demo/heimspy-walkthrough.mp4) · [recording notes](docs/demo/README.md)
 
 ## Features
 
@@ -61,7 +61,7 @@ the original, decode grpcbin fields with the workspace `.proto`._
 
 ## Compose requests
 
-Open _Tapline: Compose Request_, paste a cURL command into the composer or use its
+Open _Heimspy: Compose Request_, paste a cURL command into the composer or use its
 _cURL_ import button. Parsing uses curlconverter. Multiline commands and UTF-8 data
 files such as `curl -d @data.json https://example.com/api` are supported; review import
 warnings before sending. Missing files, multipart file references and unsupported
@@ -82,7 +82,7 @@ import limitations.
 
 ## Settings
 
-_Tapline: Settings_ (or the gear in the traffic panel) opens a settings tab with search.
+_Heimspy: Settings_ (or the gear in the traffic panel) opens a settings tab with search.
 Settings and rules live in the extension's global storage and are shared by every project
 in the same VS Code profile; `settings.json` is not used.
 
@@ -94,13 +94,13 @@ in the same VS Code profile; `settings.json` is not used.
 | `tapline.maxEntries` / `tapline.maxBodyKiB` | `2000` / `512`   | Requests kept and body bytes retained             |
 | `tapline.mcp.enabled` / `tapline.mcp.port`  | `true` / `3607`  | MCP endpoint for AI assistants                    |
 | `tapline.grpc.protoFiles`                   | `["**/*.proto"]` | Schemas for decoding gRPC messages                |
-| `tapline.rules`                             | `[]`             | Interception rules, edited with _Tapline: Rules…_ |
+| `tapline.rules`                             | `[]`             | Interception rules, edited with _Heimspy: Rules…_ |
 
 ## Rules
 
 Rules apply in order to every request whose URL matches the wildcard pattern (`*`
 matches anything, a pattern without `*` is a prefix, empty matches all) and, optionally,
-one of the listed methods. Open the editor with the ruler button or _Tapline: Rules…_;
+one of the listed methods. Open the editor with the ruler button or _Heimspy: Rules…_;
 _Break on This URL_ in a row's context menu adds a breakpoint. Example rule data:
 
 ```jsonc
@@ -144,9 +144,9 @@ overview.
 
 ## Root certificate
 
-The CA lives in the extension's global storage (_Tapline: Copy Root Certificate Path_).
+The CA lives in the extension's global storage (_Heimspy: Copy Root Certificate Path_).
 Capture starts only once the OS trusts it; the sidebar and status bar offer to install
-it, and _Tapline: Uninstall Root Certificate_ removes it.
+it, and _Heimspy: Uninstall Root Certificate_ removes it.
 
 | Platform | Store                                                           |
 | -------- | --------------------------------------------------------------- |
@@ -158,7 +158,7 @@ Firefox and snap/flatpak browsers keep their own stores and need a manual import
 `tapline.ssl.hosts` to `[]` to capture without decryption or any certificate.
 
 TLS interception follows host inclusion/exclusion settings. Unlike Charles's
-opt-in default, Tapline keeps `tapline.ssl.hosts` at `["*"]` (all hosts). Set it to
+opt-in default, Heimspy keeps `tapline.ssl.hosts` at `["*"]` (all hosts). Set it to
 `[]` or exclude a host: its HTTPS/WSS connections pass through unchanged and are
 marked **Undecrypted**. Only connection metadata and byte counts are recorded;
 clients see the original server certificate, including when they use certificate pinning.
@@ -176,7 +176,7 @@ self-signed, expired and hostname-mismatched upstream certificates. Disable it t
 verify the upstream server certificate. Explicitly saved settings are preserved.
 
 An opted-in connection that fails TLS is not automatically retried or switched to
-passthrough. Exclude pinned hosts before connecting. Tapline uses Go TLS rather than
+passthrough. Exclude pinned hosts before connecting. Heimspy uses Go TLS rather than
 Charles's TLS implementation: malformed certificate acceptance is not guaranteed to
 match, even with `ssl.insecureUpstream` enabled.
 
@@ -184,40 +184,45 @@ match, even with `ssl.insecureUpstream` enabled.
 
 The capture agent serves an [MCP](https://modelcontextprotocol.io) endpoint at
 `http://127.0.0.1:3607/mcp` (Streamable HTTP, loopback only, no extra process) while any
-window with Tapline is open. Tools: `list_sessions`, `status`, `list_requests`, `search`,
+window with Heimspy is open. Tools: `list_sessions`, `status`, `list_requests`, `search`,
 `get_request`, `get_body`, `replay`, `send`, `export_har`, `start_capture`,
 `stop_capture`, `set_recording`, `clear`, `delete`; resources
-`tapline://sessions/{sessionId}/requests/{id}`. With window isolation each window is a
+`heimspy://sessions/{sessionId}/requests/{id}`. With window isolation each window is a
 session: `list_sessions` shows them, and the other tools take `sessionId` (required
 once more than one window is open).
 
-_Tapline: Configure MCP Server…_ gives one-click install in Cursor, the URL, an
+_Heimspy: Configure MCP Server…_ gives one-click install in Cursor, the URL, an
 `mcp.json` snippet or a `claude mcp add` command.
 
 ## How it works
 
-A Node agent drives a bundled, patched [sing-box](third_party/patches/sing-box/README.md):
-sing-box terminates TLS with leaf certificates minted from the Tapline CA and streams
+A Node agent drives a bundled, patched [sing-box](https://github.com/heimspy/sing-box/blob/heimspy/service/heimspyinspector/README.md):
+sing-box terminates TLS with leaf certificates minted from the Heimspy CA and streams
 bodies through the agent, which records them, applies rules and passes them on.
 
 ## Development
 
-Requires Node 24 LTS, Go 1.27+ and git.
+This repository owns the VS Code extension and React webview. Capture logic and
+shared protocol types live in [agent](https://github.com/heimspy/agent); the pinned sing-box fork build lives in [core](https://github.com/heimspy/core).
+Requires Node 24, Go (pinned in the installed agent's `core-lock.json`), and Git.
 
 ```sh
-git clone --recurse-submodules https://github.com/fqix/tapline.git && cd tapline
-nvm use               # Node 24 LTS (.nvmrc)
-npm ci --ignore-scripts # use the WASM parser; skip unused native addons
+git clone https://github.com/heimspy/vscode.git
+cd vscode
+nvm use
+npm ci --ignore-scripts
 npm rebuild esbuild
-npm run core:build     # patch and build sing-box into core/<platform>-<arch>/
-npm run build          # esbuild → dist/
-npm test               # vitest: unit tests plus integration tests against the core
-npm run test:e2e       # the extension inside a real VS Code (downloads it on first run)
-npm run package        # VSIX for this platform (package:all for all six)
+npm run core:build
+npm run typecheck
+npm run build
+npm test
+npm run test:e2e
+npm run package
 ```
 
-Press F5 to launch the extension development host. CI builds, tests and packages every
-platform on each push and runs the end-to-end suite on one runner per OS.
+The agent dependency is pinned to a full Git commit; its build helper fetches the
+exact core commit. No sibling repositories are needed. VSIX still bundles the agent
+and core. F5 launches the extension host. See [repository boundaries](docs/repositories.md).
 
 ## Releasing
 

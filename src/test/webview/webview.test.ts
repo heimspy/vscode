@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatHttpVersion, type Transaction } from '../../shared/model'
+import { formatHttpVersion, type Transaction } from '@heimspy/agent/model'
 import { searchTransactions } from '../../utils/search'
 import {
     defaultFilters,

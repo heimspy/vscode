@@ -17,7 +17,7 @@ mkdirSync(OUT, { recursive: true })
 // Build before launching VS Code so compilation is outside the test timeout.
 // Fail explicitly if Go or its dependencies are missing; never silently skip H3.
 execFileSync(
-    process.env.TAPLINE_GO || 'go',
+    process.env.HEIMSPY_GO || 'go',
     [
         'build',
         '-mod=readonly',

@@ -1,4 +1,4 @@
-import { type Headers, type Transaction } from '../shared/model'
+import { type Headers, type Transaction } from '@heimspy/agent/model'
 
 /** Format JSON tokens without rounding large integers or changing numeric precision. */
 function prettyJson(text: string): string {

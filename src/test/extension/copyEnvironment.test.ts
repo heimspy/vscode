@@ -188,10 +188,10 @@ describe('debug environment injection', () => {
         )[0]
         ui.console.length = 0
         started({ configuration: config } as vscode.DebugSession)
-        expect(ui.console[0]).toContain('Tapline: capturing through')
+        expect(ui.console[0]).toContain('Heimspy: capturing through')
         expect(ui.console).toContain('  NODE_EXTRA_CA_CERTS=/tmp/test ca.pem')
         expect(ui.console).toContain('  HTTPS_PROXY=http://127.0.0.1:3638')
-        // A session Tapline did not touch stays quiet.
+        // A session Heimspy did not touch stays quiet.
         ui.console.length = 0
         started({
             configuration: { type: 'node', name: 'x', request: 'launch' }

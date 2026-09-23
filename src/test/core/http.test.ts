@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Transaction } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
 import {
     bodyBytes,
     cookies,
@@ -66,9 +66,9 @@ describe('http helpers', () => {
         expect(formFields({ 'content-type': 'application/json' }, '{}', false)).toEqual([])
     })
     it('produces a hex dump with ascii gutter and cap', () => {
-        const dump = hexDump(bodyBytes('Hello, Tapline!!!', false))
+        const dump = hexDump(bodyBytes('Hello, Heimspy!!!', false))
         expect(dump.split('\n')[0]).toBe(
-            '00000000  48 65 6c 6c 6f 2c 20 54  61 70 6c 69 6e 65 21 21  |Hello, Tapline!!|'
+            '00000000  48 65 6c 6c 6f 2c 20 48  65 69 6d 73 70 79 21 21  |Hello, Heimspy!!|'
         )
         expect(dump.split('\n')[1]).toMatch(/^00000010  21 /)
         expect(hexDump(new Uint8Array(40), 16)).toContain('… 24 more bytes')

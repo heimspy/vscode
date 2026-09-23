@@ -48,7 +48,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
-          submodules: recursive
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -56,29 +55,26 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
 
-      - name: Read pinned Go version
-        id: go
-        run: node -e "const fs=require('fs'), p=require('./third_party/patches/sing-box/pin.json'); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'version=' + p.toolchain.slice(2).split('.').slice(0,2).join('.') + String.fromCharCode(10))"
-
-      - name: Set up Go
-        uses: actions/setup-go@v7
-        with:
-          go-version: ${{ steps.go.outputs.version }}
-          # The Go module is fetched by core:build; pin + patches define its dependencies.
-          cache-dependency-path: |
-            third_party/patches/sing-box/pin.json
-            third_party/patches/sing-box/**
-
       - name: Install dependencies
         # Keep the lockfile usable when npm's bundled resolver updates optional
         # platform packages (esbuild publishes one package per runner platform).
         run: |
-          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
           # curlconverter's native tree-sitter addons do not support every Node 24
           # target. Build and tests use our WASM parser instead; only esbuild needs
           # its install script for this pipeline (VSIX packaging does not sign).
           npm ci --ignore-scripts
           npm rebuild esbuild
+
+      - name: Read pinned Go version
+        id: go
+        run: node -e "const fs=require('fs'), p=require('@heimspy/agent/core-lock.json'); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'version=' + p.toolchain.slice(2) + String.fromCharCode(10))"
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: ${{ steps.go.outputs.version }}
+          # The Go module is fetched by core:build; fork pin define its dependencies.
+          cache: false
 
       - name: Check formatting
         run: npm run format:check
@@ -86,11 +82,8 @@ jobs:
       - name: Check types
         run: npm run typecheck
 
-      - name: Build patched core
+      - name: Build pinned core
         run: npm run core:build -- --target ${{ matrix.target }}
-
-      - name: Test and vet patched Go packages (race detector enabled)
-        run: npm run core:test
 
       - name: Build extension
         run: npm run build
@@ -112,7 +105,7 @@ jobs:
       - name: Upload VSIX
         uses: actions/upload-artifact@v7
         with:
-          name: tapline-${{ matrix.target }}
-          path: tapline-${{ matrix.target }}-*.vsix
+          name: heimspy-${{ matrix.target }}
+          path: heimspy-${{ matrix.target }}-*.vsix
           if-no-files-found: error
           retention-days: 14

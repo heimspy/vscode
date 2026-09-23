@@ -6,7 +6,7 @@ import {
     matchesMessage,
     resendUnavailable
 } from '../../webview/lib/messages'
-import type { Frame } from '../../shared/model'
+import type { Frame } from '@heimspy/agent/model'
 
 const frame: Frame = { id: '1', time: 0, direction: 'send', binary: false, data: '你好' }
 

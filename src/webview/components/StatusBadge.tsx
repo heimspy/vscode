@@ -1,4 +1,4 @@
-import { grpcStatusName, type Transaction } from '../../shared/model'
+import { grpcStatusName, type Transaction } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 
 type Subject = Pick<Transaction, 'status' | 'state' | 'paused' | 'scheme'> & {

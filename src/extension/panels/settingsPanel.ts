@@ -93,7 +93,7 @@ export class SettingsPanel implements vscode.Disposable {
         }
         const panel = vscode.window.createWebviewPanel(
             'tapline.settings.panel',
-            `Tapline: ${vscode.l10n.t('Settings')}`,
+            `Heimspy: ${vscode.l10n.t('Settings')}`,
             vscode.ViewColumn.Active,
             {
                 enableScripts: true,
@@ -141,9 +141,9 @@ export class SettingsPanel implements vscode.Disposable {
                 sslNoHosts: preferences.get<string[]>('ssl.noHosts', []),
                 // 0 while capture is stopped: the port is assigned when it starts.
                 port: this.client.port || 0,
-                certificatePath: this.client.certificatePath || '<tapline-ca.pem>',
-                caBundlePath: this.client.caBundlePath || '<tapline-ca-bundle.pem>',
-                truststorePath: this.client.truststorePath || '<tapline-truststore.p12>'
+                certificatePath: this.client.certificatePath || '<heimspy-ca.pem>',
+                caBundlePath: this.client.caBundlePath || '<heimspy-ca-bundle.pem>',
+                truststorePath: this.client.truststorePath || '<heimspy-truststore.p12>'
             },
             ...result
         }
@@ -197,7 +197,7 @@ export class SettingsPanel implements vscode.Disposable {
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; font-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="${asset('webview.css')}">
-<title>Tapline Settings</title>
+<title>Heimspy Settings</title>
 </head>
 <body data-view="settings">
 <div id="root"></div>

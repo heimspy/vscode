@@ -1,8 +1,10 @@
 import { build, context } from 'esbuild'
-import { copyFileSync, mkdirSync, readFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 const watch = process.argv.includes('--watch')
-const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const { version } = require('@heimspy/agent/package.json')
 
 // curlconverter parses bash with a native tree-sitter addon; the extension host cannot
 // load that, so its parser module is swapped for our WebAssembly-backed one and the two
@@ -25,7 +27,10 @@ for (const [from, to] of [
     copyFileSync(from, to)
 
 const node = {
-    entryPoints: { extension: 'src/extension/index.ts', agent: 'src/agent/main.ts' },
+    entryPoints: {
+        extension: 'src/extension/index.ts',
+        agent: require.resolve('@heimspy/agent/main')
+    },
     bundle: true,
     platform: 'node',
     target: 'node20',
@@ -33,7 +38,7 @@ const node = {
     outdir: 'dist',
     external: ['vscode'],
     plugins: [wasmParser],
-    define: { 'process.env.TAPLINE_VERSION': JSON.stringify(version) },
+    define: { 'process.env.HEIMSPY_VERSION': JSON.stringify(version) },
     sourcemap: true,
     minify: !watch,
     logLevel: 'info'

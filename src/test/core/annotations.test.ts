@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Engine } from '../../core/engine'
+import { Engine } from '@heimspy/agent/engine'
 import { toRow } from '../../webview/types/messages'
 
 async function setup() {

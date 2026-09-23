@@ -7,3 +7,4 @@ out/
 *.vsix
 *.log
 .DS_Store
+*.tgz

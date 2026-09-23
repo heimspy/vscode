@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { Transaction } from '../../shared/model'
-import { bytes, formatHttpVersion } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
+import { bytes, formatHttpVersion } from '@heimspy/agent/model'
 import { cookies, formFields, queryParams } from '../lib/http'
 import { t } from '../lib/i18n'
 import { saveState, state } from '../lib/vscode'

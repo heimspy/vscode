@@ -1,4 +1,4 @@
-import type { Frame, GrpcMessage, ServerEvent } from '../../shared/model'
+import type { Frame, GrpcMessage, ServerEvent } from '@heimspy/agent/model'
 
 export type MessageDirection = 'all' | 'send' | 'receive'
 

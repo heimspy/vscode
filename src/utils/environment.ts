@@ -5,7 +5,7 @@
 export interface CaptureTarget {
     port: number
     certificatePath: string
-    /** Public roots plus Tapline, for replacement CA settings. */
+    /** Public roots plus Heimspy, for replacement CA settings. */
     caBundlePath?: string
     /** PKCS#12 trust store for JVMs when TLS decryption is enabled. */
     truststorePath?: string

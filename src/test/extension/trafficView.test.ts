@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { Transaction } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
 
 vi.mock('vscode', () => import('../helpers/vscodeMock'))
 const mock = await import('../helpers/vscodeMock')

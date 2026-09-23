@@ -1,5 +1,5 @@
 // Pure filtering and sorting for the sequence table; covered by src/test/webview/webview.test.ts.
-import { matchWildcard } from '../../shared/model'
+import { matchWildcard } from '@heimspy/agent/model'
 import type { Row } from '../types/messages'
 
 export type Quick =

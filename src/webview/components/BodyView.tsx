@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import { bytes, pretty, type Transaction } from '../../shared/model'
+import { bytes, pretty, type Transaction } from '@heimspy/agent/model'
 import {
     bodyBytes,
     contentType,

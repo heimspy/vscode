@@ -5,7 +5,7 @@ import type {
     Rule,
     RulePhase,
     Transaction
-} from '../../shared/model'
+} from '@heimspy/agent/model'
 
 /** Lightweight row for the sequence table: no headers, bodies or frames. */
 export type Row = Pick<

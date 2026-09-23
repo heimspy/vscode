@@ -5,8 +5,10 @@ import { mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import type * as vscode from 'vscode'
-import { pipePath } from '../../agent/paths'
+import { pipePath } from '@heimspy/agent/paths'
 import { AgentClient, needsAgentUpgrade } from '../../extension/client'
+
+vi.mock('@heimspy/agent/package.json', () => ({ version: '0.10.0' }))
 
 const config = vi.hoisted(() => ({ sessionId: 'window-a' }))
 
@@ -66,7 +68,7 @@ describe('capture agent client lifecycle', () => {
 
     beforeEach(async () => {
         config.sessionId = 'window-a'
-        directory = mkdtempSync(join(tmpdir(), 'tapline-client-'))
+        directory = mkdtempSync(join(tmpdir(), 'heimspy-client-'))
         requests = []
         respond = (socket, request) =>
             reply(
@@ -85,7 +87,7 @@ describe('capture agent client lifecycle', () => {
         })
         await new Promise<void>((resolve) => server.listen(pipePath(directory), resolve))
         client = new AgentClient({
-            extension: { packageJSON: { version: '0.10.0' } },
+            extension: { packageJSON: { version: '99.0.0' } },
             extensionPath: directory,
             globalStorageUri: { fsPath: directory },
             subscriptions: []
@@ -112,7 +114,7 @@ describe('capture agent client lifecycle', () => {
             previous(socket, request)
         }
         const context = {
-            extension: { packageJSON: { version: '0.10.0' } },
+            extension: { packageJSON: { version: '99.0.0' } },
             extensionPath: directory,
             globalStorageUri: { fsPath: directory },
             subscriptions: []
@@ -350,7 +352,7 @@ describe('capture agent client lifecycle', () => {
         expect(requests.at(-1)).toBe('clear')
     })
 
-    it('never replaces a newer release even if its file timestamp is older', async () => {
+    it('compares the bundled agent version even when the extension version is newer', async () => {
         mkdirSync(join(directory, 'dist'))
         writeFileSync(join(directory, 'dist', 'agent.js'), '// older client')
         const remote = { ...state, agentVersion: '0.11.0', build: 1 }

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
-import { grpcStatusName, type Transaction } from '../../shared/model'
+import { grpcStatusName, type Transaction } from '@heimspy/agent/model'
 import type { AgentClient } from '../client'
-import { bytes, duration, statusLabel } from '../../utils/format'
+import { bytes, duration, statusLabel } from '@heimspy/agent/format'
 
 /** Charles-style structure view: host → path folders → requests. */
 export type TrafficNode =

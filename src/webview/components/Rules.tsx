@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ruleKinds, ruleLabel, type Edit, type Rule, type RuleKind } from '../../shared/model'
+import { ruleKinds, ruleLabel, type Edit, type Rule, type RuleKind } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import { saveState, state, vscode } from '../lib/vscode'
 import { IconButton } from './IconButton'

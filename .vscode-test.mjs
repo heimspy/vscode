@@ -15,5 +15,5 @@ export default defineConfig({
         '--user-data-dir',
         resolve('out/e2e-user-data')
     ],
-    env: { TAPLINE_E2E: '1' }
+    env: { HEIMSPY_E2E: '1' }
 })

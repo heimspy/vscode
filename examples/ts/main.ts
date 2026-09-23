@@ -49,7 +49,7 @@ async function configureProxyIfAvailable(): Promise<void> {
 
     if (!process.env.NODE_USE_ENV_PROXY) {
         console.warn(
-            `\n⚠️  [Tapline] Proxy environment detected (${proxy}).\n` +
+            `\n⚠️  [Heimspy] Proxy environment detected (${proxy}).\n` +
                 `   For Node.js native fetch to route through the proxy, please run with:\n` +
                 `   NODE_USE_ENV_PROXY=1 node --experimental-strip-types examples/ts/main.ts\n` +
                 `   (or run 'npm install' in examples/ts/ to enable undici proxy dispatch)\n`

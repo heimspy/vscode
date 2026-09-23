@@ -4,7 +4,7 @@ import { homedir } from 'node:os'
 import { join, posix } from 'node:path'
 
 /**
- * Operating-system trust for the Tapline root CA. Per-process variables cover curl,
+ * Operating-system trust for the Heimspy root CA. Per-process variables cover curl,
  * Node, Python and friends, but system frameworks and browsers only honour the OS
  * store, and capture refuses to start until the CA is trusted there.
  *
@@ -41,7 +41,7 @@ export interface TrustStore {
     uninstall(): Promise<void>
 }
 
-export const CERTIFICATE_NAME = 'Tapline Root CA'
+export const CERTIFICATE_NAME = 'Heimspy Root CA'
 
 /** Uppercase hex SHA-1 of the DER certificate: the key both `security` and `certutil` use. */
 export function fingerprint(pem: string): string {
@@ -176,7 +176,7 @@ function linux(certificate: string, runner: Runner, exists: (path: string) => bo
     }
     const install = () =>
         run(
-            'Install Tapline root certificate',
+            'Install Heimspy root certificate',
             `cp ${quote(certificate)} ${quote(target)} && chmod 644 ${quote(target)} && ${anchor.update}`
         )
     return {
@@ -195,7 +195,7 @@ function linux(certificate: string, runner: Runner, exists: (path: string) => bo
         install,
         trust: install,
         uninstall: () =>
-            run('Uninstall Tapline root certificate', `rm -f ${quote(target)} && ${anchor.update}`)
+            run('Uninstall Heimspy root certificate', `rm -f ${quote(target)} && ${anchor.update}`)
     }
 }
 

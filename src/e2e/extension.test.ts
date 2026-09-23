@@ -8,11 +8,11 @@ import net from 'node:net'
 import { join } from 'node:path'
 import { existsSync, readFileSync } from 'node:fs'
 import { X509Certificate } from 'node:crypto'
-import { httpsServer, selfSigned, viaProxyTLS } from '../test/helpers/helpers'
+import { httpsServer, selfSigned, viaProxyTLS } from '@heimspy/agent/testing'
 import { promisify } from 'node:util'
 import * as vscode from 'vscode'
-import type { TaplineApi } from '../extension'
-import { defaultSettings, type Rule, type Transaction } from '../shared/model'
+import type { HeimspyApi } from '../extension'
+import { defaultSettings, type Rule, type Transaction } from '@heimspy/agent/model'
 
 /** The window's proxy port is OS-assigned; read after capture starts. */
 let proxyPort = 0
@@ -99,15 +99,15 @@ function echoServer() {
 
 const setRules = async (rules: Rule[]) => {
     await vscode.extensions
-        .getExtension<TaplineApi>('fqix.tapline')!
+        .getExtension<HeimspyApi>('fqix.tapline')!
         .exports.client.saveRules(rules)
     // The client pushes settings to the agent on the change event; give it a moment.
     await new Promise((r) => setTimeout(r, 400))
 }
 
-suite('Tapline end to end', function () {
+suite('Heimspy end to end', function () {
     this.timeout(120000)
-    let api: TaplineApi
+    let api: HeimspyApi
     let origin: Awaited<ReturnType<typeof echoServer>>
     const transactions = () => [...api.client.transactions.values()]
     const find = (predicate: (t: Transaction) => boolean, what = 'transaction') =>
@@ -116,7 +116,7 @@ suite('Tapline end to end', function () {
         find((t) => predicate(t) && t.state !== 'pending', what)
 
     suiteSetup(async () => {
-        const extension = vscode.extensions.getExtension<TaplineApi>('fqix.tapline')
+        const extension = vscode.extensions.getExtension<HeimspyApi>('fqix.tapline')
         assert.ok(extension, 'extension is installed')
         api = await extension.activate()
         origin = await echoServer()
@@ -343,7 +343,7 @@ suite('Tapline end to end', function () {
         await vscode.commands.executeCommand('tapline.openSequence')
         await until(
             () =>
-                vscode.window.tabGroups.all.some((g) => g.tabs.some((t) => t.label === 'Tapline')),
+                vscode.window.tabGroups.all.some((g) => g.tabs.some((t) => t.label === 'Heimspy')),
             10000,
             'panel tab'
         )
@@ -364,7 +364,7 @@ suite('Tapline end to end', function () {
         await vscode.commands.executeCommand('tapline.settings')
         await until(() => settingsTabs().length === 1, 10000, 'standalone Settings tab')
         assert.ok(
-            tabs().some((tab) => tab.label === 'Tapline'),
+            tabs().some((tab) => tab.label === 'Heimspy'),
             'traffic remains open'
         )
         await vscode.commands.executeCommand('tapline.settings')
@@ -372,7 +372,7 @@ suite('Tapline end to end', function () {
         await vscode.window.tabGroups.close(settingsTabs())
         await until(() => settingsTabs().length === 0, 10000, 'Settings closes')
         assert.ok(
-            tabs().some((tab) => tab.label === 'Tapline'),
+            tabs().some((tab) => tab.label === 'Heimspy'),
             'closing Settings preserves traffic'
         )
         await vscode.commands.executeCommand('tapline.settings')
@@ -382,8 +382,8 @@ suite('Tapline end to end', function () {
 
     test('decrypts and records HTTP/3 over the SOCKS5 UDP relay', async () => {
         const wasRunning = api.client.running
-        const url = 'https://localhost:18443/tapline-e2e-h3?source=quic'
-        const body = '{"protocol":"h3","message":"你好 Tapline"}'
+        const url = 'https://localhost:18443/heimspy-e2e-h3?source=quic'
+        const body = '{"protocol":"h3","message":"你好 Heimspy"}'
         try {
             // Scope TLS inspection to this test via the agent API. Trust the CA in
             // the probe only, without changing the machine's certificate store.

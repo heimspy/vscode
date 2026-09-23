@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { bytes, type Transaction } from '../../shared/model'
+import { bytes, type Transaction } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import { eventSearchText, frameSize, resendUnavailable } from '../lib/messages'
 import { MessageStream } from './MessageStream'

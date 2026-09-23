@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { randomUUID } from 'node:crypto'
-import type { Transaction } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
 import { renderComparison } from '../../utils/compare'
 
 /** Immutable snapshots survive capture updates and deletion until their editors close. */
@@ -36,7 +36,7 @@ export class ComparisonDocuments implements vscode.TextDocumentContentProvider, 
                 'vscode.diff',
                 original,
                 modified,
-                vscode.l10n.t('Tapline: #{0} ↔ #{1}', left.sequence, right.sequence),
+                vscode.l10n.t('Heimspy: #{0} ↔ #{1}', left.sequence, right.sequence),
                 { preview: false, viewColumn: vscode.ViewColumn.Active }
             )
         } catch (error) {

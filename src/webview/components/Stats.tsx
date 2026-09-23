@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { bytes, duration } from '../../shared/model'
+import { bytes, duration } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import { aggregate } from '../lib/stats'
 import type { Row } from '../types/messages'

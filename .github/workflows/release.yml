@@ -46,7 +46,7 @@ jobs:
       - name: Download platform VSIX packages
         uses: actions/download-artifact@v7
         with:
-          pattern: tapline-*
+          pattern: heimspy-*
           path: dist
           merge-multiple: true
 

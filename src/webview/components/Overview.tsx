@@ -1,4 +1,4 @@
-import { bytes, duration, grpcStatusName, type Transaction } from '../../shared/model'
+import { bytes, duration, grpcStatusName, type Transaction } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import type { Row } from '../types/messages'
 

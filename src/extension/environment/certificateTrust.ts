@@ -38,7 +38,7 @@ const runner: Runner = {
             { type: 'shell' },
             vscode.TaskScope.Global,
             title,
-            'Tapline',
+            'Heimspy',
             new vscode.ShellExecution(
                 file,
                 args.map((value) => ({ value, quoting: vscode.ShellQuoting.Strong }))
@@ -143,7 +143,7 @@ export class CertificateTrust implements vscode.Disposable {
         } catch (error) {
             const choice = await vscode.window.showErrorMessage(
                 vscode.l10n.t(
-                    'Tapline could not check the root certificate: {0}',
+                    'Heimspy could not check the root certificate: {0}',
                     error instanceof Error ? error.message : String(error)
                 ),
                 { modal },
@@ -156,12 +156,12 @@ export class CertificateTrust implements vscode.Disposable {
         const install = vscode.l10n.t('Install & Trust')
         const choice = await vscode.window.showWarningMessage(
             vscode.l10n.t(
-                'Tapline needs its root certificate trusted by the operating system before capturing HTTPS.'
+                'Heimspy needs its root certificate trusted by the operating system before capturing HTTPS.'
             ),
             {
                 modal,
                 detail: vscode.l10n.t(
-                    'Installing prompts for your credentials. You can remove the certificate later with "Tapline: Uninstall Root Certificate".'
+                    'Installing prompts for your credentials. You can remove the certificate later with "Heimspy: Uninstall Root Certificate".'
                 )
             },
             install
@@ -190,13 +190,13 @@ export class CertificateTrust implements vscode.Disposable {
 
     install() {
         return this.run(
-            vscode.l10n.t('Installing the Tapline root certificate…'),
+            vscode.l10n.t('Installing the Heimspy root certificate…'),
             (store) => store.install(),
             (status, store) =>
                 status === 'trusted'
-                    ? vscode.l10n.t('Tapline root certificate installed and trusted.')
+                    ? vscode.l10n.t('Heimspy root certificate installed and trusted.')
                     : vscode.l10n.t(
-                          'Tapline root certificate added to the {0}. Run "Tapline: Trust Root Certificate" to mark it trusted.',
+                          'Heimspy root certificate added to the {0}. Run "Heimspy: Trust Root Certificate" to mark it trusted.',
                           store.location
                       )
         )
@@ -204,11 +204,11 @@ export class CertificateTrust implements vscode.Disposable {
 
     trust() {
         return this.run(
-            vscode.l10n.t('Trusting the Tapline root certificate…'),
+            vscode.l10n.t('Trusting the Heimspy root certificate…'),
             (store) => store.trust(),
             (status) =>
                 status === 'trusted'
-                    ? vscode.l10n.t('Tapline root certificate installed and trusted.')
+                    ? vscode.l10n.t('Heimspy root certificate installed and trusted.')
                     : vscode.l10n.t('The operating system still does not trust the certificate.')
         )
     }
@@ -216,18 +216,18 @@ export class CertificateTrust implements vscode.Disposable {
     async uninstall() {
         const remove = vscode.l10n.t('Uninstall')
         const choice = await vscode.window.showWarningMessage(
-            vscode.l10n.t('Remove the Tapline root certificate from the operating system store?'),
+            vscode.l10n.t('Remove the Heimspy root certificate from the operating system store?'),
             { modal: true },
             remove
         )
         if (choice !== remove) return
         if (this.client.running) await this.client.stop()
         await this.run(
-            vscode.l10n.t('Removing the Tapline root certificate…'),
+            vscode.l10n.t('Removing the Heimspy root certificate…'),
             (store) => store.uninstall(),
             (status) =>
                 status === 'missing'
-                    ? vscode.l10n.t('Tapline root certificate removed.')
+                    ? vscode.l10n.t('Heimspy root certificate removed.')
                     : vscode.l10n.t(
                           'The certificate is still present in the operating system store.'
                       )

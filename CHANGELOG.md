@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Tapline are documented here. The format follows
+All notable changes to Heimspy are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
@@ -49,7 +49,7 @@ All notable changes to Tapline are documented here. The format follows
   terminals and debug sessions, on top of the host's own NO_PROXY.
 - `tapline.ssl.insecureUpstream` to accept any upstream certificate on decrypted
   connections, for self-signed or expired development backends. Off by default: the
-  client only ever sees the Tapline certificate, so upstream interception would
+  client only ever sees the Heimspy certificate, so upstream interception would
   otherwise go unnoticed.
 
 ### Changed
@@ -154,7 +154,7 @@ All notable changes to Tapline are documented here. The format follows
 
 ### Added
 
-- _Tapline: Settings_ (also the gear icon in the traffic panel) opens global
+- _Heimspy: Settings_ (also the gear icon in the traffic panel) opens global
   preferences in their own editor tab, with category navigation and bilingual
   (English/简体中文) search across setting names and descriptions.
 
@@ -314,8 +314,8 @@ body:"…" header:name=value -term`, with a syntax popover), multi-select in the
   HTTP, `tapline.mcp.enabled` / `tapline.mcp.port`) exposing captured traffic to AI
   assistants: `status`, `list_requests`, `search`, `get_request`, `get_body`, `replay`,
   `send`, `export_har`, `start_capture`, `stop_capture`, `set_recording`, `clear`,
-  `delete` and `tapline://requests/{id}` resources.
-- _Tapline: Configure MCP Server…_ offers Cursor one-click install, the URL, an
+  `delete` and `heimspy://requests/{id}` resources.
+- _Heimspy: Configure MCP Server…_ offers Cursor one-click install, the URL, an
   `mcp.json` snippet and a `claude mcp add` command.
 - gRPC decoding: request and response bodies are split into their length-prefixed
   messages (gzip/deflate and gRPC-Web trailers handled) and decoded with the workspace's
@@ -339,7 +339,7 @@ body:"…" header:name=value -term`, with a syntax popover), multi-select in the
 
 ### Changed
 
-- One **Tapline** panel replaces the separate request, host and sequence views. The
+- One **Heimspy** panel replaces the separate request, host and sequence views. The
   sidebar _Structure_ tree stays: clicking a request focuses it in the panel, clicking a
   host filters the panel to that host and shows its overview.
 - The sequence table is virtualised and receives rows incrementally, so thousands of

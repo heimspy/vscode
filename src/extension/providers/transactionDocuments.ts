@@ -1,8 +1,8 @@
 import * as vscode from 'vscode'
-import type { Transaction } from '../../shared/model'
-import { pretty } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
+import { pretty } from '@heimspy/agent/model'
 import type { AgentClient } from '../client'
-import { bodyExtension, renderTransaction } from '../../utils/format'
+import { bodyExtension, renderTransaction } from '@heimspy/agent/format'
 
 export const SCHEME = 'tapline'
 

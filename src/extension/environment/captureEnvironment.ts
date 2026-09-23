@@ -83,7 +83,7 @@ export class CaptureEnvironment implements vscode.Disposable {
         }
         collection.clear()
         collection.description = vscode.l10n.t(
-            'Routes this terminal through Tapline (port {0})',
+            'Routes this terminal through Heimspy (port {0})',
             this.client.port
         )
         for (const [name, value] of Object.entries(env)) collection.replace(name, value)
@@ -110,7 +110,7 @@ export class CaptureEnvironment implements vscode.Disposable {
         const console = vscode.debug.activeDebugConsole
         console.appendLine(
             vscode.l10n.t(
-                'Tapline: capturing through 127.0.0.1:{0}; environment injected into this session:',
+                'Heimspy: capturing through 127.0.0.1:{0}; environment injected into this session:',
                 this.client.port
             )
         )
@@ -118,7 +118,7 @@ export class CaptureEnvironment implements vscode.Disposable {
             console.appendLine(`  ${name}=${value}`)
     }
 
-    /** The variables this session received from Tapline (its own env wins on conflicts). */
+    /** The variables this session received from Heimspy (its own env wins on conflicts). */
     private injectedFor(config: vscode.DebugConfiguration): Record<string, string> | undefined {
         const env = config.env as Record<string, string> | undefined
         if (!env || !this.client.running) return undefined
@@ -227,7 +227,7 @@ export class CaptureEnvironment implements vscode.Disposable {
         if (!pick) return
         const env = this.environment(pick.profiles)
         const terminal = vscode.window.createTerminal({
-            name: `Tapline · ${pick.label}`,
+            name: `Heimspy · ${pick.label}`,
             iconPath: new vscode.ThemeIcon('broadcast'),
             env
         })

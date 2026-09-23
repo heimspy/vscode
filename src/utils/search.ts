@@ -1,6 +1,6 @@
 // Host-side half of the filter query: terms over headers and bodies, which the table
 // rows do not carry. Shares the parser with the webview.
-import type { Transaction } from '../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
 import { parseQuery, remoteKeys, type Term } from '../webview/lib/filter'
 
 const headerText = (h: Record<string, string>) =>

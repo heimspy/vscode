@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Rule, Transaction } from '../../shared/model'
+import type { Rule, Transaction } from '@heimspy/agent/model'
 import { defaultFilters, matches, type Filters } from '../lib/filter'
 import { saveState, state, vscode } from '../lib/vscode'
 import type { ComposeDraft, HostMessage, Pane, Row } from '../types/messages'

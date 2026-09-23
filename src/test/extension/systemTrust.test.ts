@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { selfSigned } from '../helpers/helpers'
+import { selfSigned } from '@heimspy/agent/testing'
 import {
     fingerprint,
     systemTrustStore,
@@ -11,7 +11,7 @@ import {
 } from '../../extension/environment/systemTrust'
 
 const identity = selfSigned()
-const directory = mkdtempSync(join(tmpdir(), 'tapline-trust-'))
+const directory = mkdtempSync(join(tmpdir(), 'heimspy-trust-'))
 const certificate = join(directory, 'ca.pem')
 writeFileSync(certificate, identity.cert)
 const hash = fingerprint(identity.cert)
@@ -65,7 +65,7 @@ describe('system trust store', () => {
             const installed = fake('darwin', {
                 'verify-cert': { code: 1, stderr: 'CSSMERR_TP_NOT_TRUSTED' },
                 'find-certificate': {
-                    stdout: `SHA-1 hash: ${hash}\n    "labl"<blob>="Tapline Root CA"`
+                    stdout: `SHA-1 hash: ${hash}\n    "labl"<blob>="Heimspy Root CA"`
                 }
             })
             expect(await systemTrustStore(certificate, installed.runner, home).status()).toBe(

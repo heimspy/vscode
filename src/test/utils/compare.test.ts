@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Transaction } from '../../shared/model'
+import type { Transaction } from '@heimspy/agent/model'
 import { renderComparison } from '../../utils/compare'
 
 const base: Transaction = {

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { matchHost, toCurl, toHAR, type Transaction } from '../../shared/model'
-import { bodyExtension, renderTransaction } from '../../utils/format'
+import { matchHost, toCurl, toHAR, type Transaction } from '@heimspy/agent/model'
+import { bodyExtension, renderTransaction } from '@heimspy/agent/format'
 import { captureEnvironment, defaultDebugRuntimes, PROFILES } from '../../utils/environment'
 
 const base: Transaction = {
@@ -87,8 +87,8 @@ describe('format', () => {
             const env = captureEnvironment(
                 {
                     port: 3606,
-                    certificatePath: '/tapline.pem',
-                    truststorePath: '/tapline.p12',
+                    certificatePath: '/heimspy.pem',
+                    truststorePath: '/heimspy.p12',
                     ...policy
                 },
                 PROFILES
@@ -120,14 +120,14 @@ describe('format', () => {
             const env = captureEnvironment(
                 {
                     port: 3606,
-                    certificatePath: '/tapline.pem',
-                    truststorePath: '/tapline.p12',
+                    certificatePath: '/heimspy.pem',
+                    truststorePath: '/heimspy.p12',
                     ...policy
                 },
                 PROFILES
             )
-            expect(env.REQUESTS_CA_BUNDLE).toBe('/tapline.pem')
-            expect(env.JAVA_TOOL_OPTIONS).toContain('-Djavax.net.ssl.trustStore=/tapline.p12')
+            expect(env.REQUESTS_CA_BUNDLE).toBe('/heimspy.pem')
+            expect(env.JAVA_TOOL_OPTIONS).toContain('-Djavax.net.ssl.trustStore=/heimspy.p12')
         }
     })
     it('picks body extensions from content types', () => {
@@ -200,7 +200,7 @@ describe('format', () => {
         expect(customNoProxy.no_proxy).toBe(customNoProxy.NO_PROXY)
     })
 
-    it('uses public-root bundles for partial decryption but only the Tapline CA for Node additive trust', () => {
+    it('uses public-root bundles for partial decryption but only the Heimspy CA for Node additive trust', () => {
         const env = captureEnvironment(
             {
                 port: 3606,

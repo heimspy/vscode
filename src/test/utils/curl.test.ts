@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { importCurl, looksLikeCurl } from '../../utils/curl'
-import { toCurl } from '../../shared/model'
+import { toCurl } from '@heimspy/agent/model'
 
 describe('importCurl', () => {
     // Commands copied from the linked demos, including their unescaped line breaks.
@@ -142,7 +142,7 @@ curl https://reqbin.com/echo/post/json
         ).rejects.toThrow()
     })
 
-    it("round-trips Tapline's own Copy as cURL output", async () => {
+    it("round-trips Heimspy's own Copy as cURL output", async () => {
         const command = toCurl({
             method: 'PATCH',
             url: "https://h/it's?x=1",

@@ -1,16 +1,16 @@
-# Tapline Traffic Examples
+# Heimspy Traffic Examples
 
-This directory provides sample HTTP client code in multiple programming languages (**Go**, **Python**, **TypeScript**, and **Java**), as well as a shell script to generate a broad spread of sample traffic through Tapline.
+This directory provides sample HTTP client code in multiple programming languages (**Go**, **Python**, **TypeScript**, and **Java**), as well as a shell script to generate a broad spread of sample traffic through Heimspy.
 
 Each language example implements standard **GET**, **POST** (with JSON body), and **DELETE** requests without requiring any external 3rd-party dependencies.
 
 ---
 
-## Running inside VS Code with Tapline
+## Running inside VS Code with Heimspy
 
-When you start traffic capture in the Tapline extension, VS Code terminals automatically have proxy environment variables (`HTTP_PROXY`, `HTTPS_PROXY`) and the custom CA certificate path (`SSL_CERT_FILE`) injected.
+When you start traffic capture in the Heimspy extension, VS Code terminals automatically have proxy environment variables (`HTTP_PROXY`, `HTTPS_PROXY`) and the custom CA certificate path (`SSL_CERT_FILE`) injected.
 
-Running any of the examples below from such a terminal will route all requests directly through Tapline for inspection.
+Running any of the examples below from such a terminal will route all requests directly through Heimspy for inspection.
 
 ---
 

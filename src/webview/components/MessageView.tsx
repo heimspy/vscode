@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import type { Headers, Transaction } from '../../shared/model'
-import { bytes } from '../../shared/model'
+import type { Headers, Transaction } from '@heimspy/agent/model'
+import { bytes } from '@heimspy/agent/model'
 import {
     cookies,
     findJwts,

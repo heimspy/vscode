@@ -26,7 +26,7 @@ func getBaseURL() string {
 func newHTTPClient() *http.Client {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 
-	// If SSL_CERT_FILE is set (e.g. injected by Tapline), load custom CA cert pool
+	// If SSL_CERT_FILE is set (e.g. injected by Heimspy), load custom CA cert pool
 	if caFile := os.Getenv("SSL_CERT_FILE"); caFile != "" {
 		if pem, err := os.ReadFile(caFile); err == nil {
 			pool, _ := x509.SystemCertPool()

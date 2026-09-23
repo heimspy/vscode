@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { bytes, duration, formatHttpVersion } from '../../shared/model'
+import { bytes, duration, formatHttpVersion } from '@heimspy/agent/model'
 import { columns, toggleSort, type Column, type Sort } from '../lib/filter'
 import { t } from '../lib/i18n'
 import { saveState, state, vscode } from '../lib/vscode'

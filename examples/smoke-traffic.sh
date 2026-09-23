@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Generate a spread of traffic through the Tapline proxy so every panel feature has
+# Generate a spread of traffic through the Heimspy proxy so every panel feature has
 # something to show: plain HTTP, HTTPS, HTTP/2, redirects, each status class, JSON /
 # form / binary / gzip bodies, cookies, chunked streams and gRPC (unary, server, client and
 # bidirectional streams, plaintext and TLS) and HTTP/3 over QUIC.
 #
-# Run it from a VS Code terminal opened while capture is on — Tapline injects
+# Run it from a VS Code terminal opened while capture is on — Heimspy injects
 # HTTP(S)_PROXY and the CA variables there. Elsewhere, set them by hand:
 #   HTTPS_PROXY=http://127.0.0.1:3606 SSL_CERT_FILE=/path/to/tapline-ca.pem examples/smoke-traffic.sh
 #
@@ -25,7 +25,7 @@ fi
 H3_PROBE=${H3_PROBE:-$script_dir/h3-probe}
 
 if [[ -z ${HTTPS_PROXY:-${https_proxy:-}} ]]; then
-    echo "warning: HTTPS_PROXY is not set — traffic will bypass Tapline" >&2
+    echo "warning: HTTPS_PROXY is not set — traffic will bypass Heimspy" >&2
 fi
 
 pass=0
@@ -53,7 +53,7 @@ step "POST /post (json)"              -H 'Content-Type: application/json' -d '{"
 echo "== HTTPS / HTTP/2"
 step "GET  /get (http/1.1)"           --http1.1 "$HTTPBIN/get?proto=h1"
 step "GET  /get (http/2)"             --http2 "$HTTPBIN/get?proto=h2"
-step "GET  /headers"                  -H 'X-Tapline: smoke' -H 'Accept: application/json' "$HTTPBIN/headers"
+step "GET  /headers"                  -H 'X-Heimspy: smoke' -H 'Accept: application/json' "$HTTPBIN/headers"
 step "GET  /user-agent"               -A 'tapline-smoke/1.0' "$HTTPBIN/user-agent"
 
 echo "== Methods and bodies"
@@ -109,7 +109,7 @@ step "GET  /range/1024 (partial)"     -r 0-255 "$HTTPBIN/range/1024"
 echo "== gRPC ($GRPCBIN_TLS / $GRPCBIN_PLAIN)"
 if command -v grpcurl >/dev/null 2>&1; then
     # Go honours HTTPS_PROXY, so grpcurl goes through the proxy like curl does. The
-    # Tapline CA is injected as SSL_CERT_FILE; pass it explicitly for platforms
+    # Heimspy CA is injected as SSL_CERT_FILE; pass it explicitly for platforms
     # where Go ignores that variable.
     ca=()
     [[ -n ${SSL_CERT_FILE:-} && -f ${SSL_CERT_FILE:-} ]] && ca=(-cacert "$SSL_CERT_FILE")
@@ -167,7 +167,7 @@ fi
 
 echo "== HTTP/3 (QUIC over the proxy's SOCKS5 UDP relay)"
 # curl, Chrome & co. refuse HTTP/3 through any proxy, so a small quic-go client in
-# examples/h3-probe speaks SOCKS5 UDP ASSOCIATE to Tapline's mixed listener instead.
+# examples/h3-probe speaks SOCKS5 UDP ASSOCIATE to Heimspy's mixed listener instead.
 if command -v go >/dev/null 2>&1; then
     proxy=${HTTPS_PROXY:-${https_proxy:-http://127.0.0.1:3606}}
     proxy=${proxy#*://}

@@ -11,7 +11,7 @@ export async function configureMcp(client: AgentClient) {
     if (!url) {
         const choice = await vscode.window.showWarningMessage(
             vscode.l10n.t(
-                'The Tapline MCP endpoint is disabled or its port is unavailable. Check MCP enabled and MCP port.'
+                'The Heimspy MCP endpoint is disabled or its port is unavailable. Check MCP enabled and MCP port.'
             ),
             vscode.l10n.t('Open Settings'),
             vscode.l10n.t('Show Logs')
@@ -22,8 +22,8 @@ export async function configureMcp(client: AgentClient) {
         return
     }
     const definition = { url }
-    const json = JSON.stringify({ mcpServers: { tapline: definition } }, null, 2)
-    const claude = `claude mcp add --transport http tapline ${url}`
+    const json = JSON.stringify({ mcpServers: { heimspy: definition } }, null, 2)
+    const claude = `claude mcp add --transport http heimspy ${url}`
     const cursor = /cursor/i.test(vscode.env.appName)
     const picks: (vscode.QuickPickItem & { run: () => Thenable<unknown> })[] = [
         ...(cursor
@@ -34,7 +34,7 @@ export async function configureMcp(client: AgentClient) {
                       run: () =>
                           vscode.env.openExternal(
                               vscode.Uri.parse(
-                                  `cursor://anysphere.cursor-deeplink/mcp/install?name=tapline&config=${Buffer.from(JSON.stringify(definition)).toString('base64')}`
+                                  `cursor://anysphere.cursor-deeplink/mcp/install?name=heimspy&config=${Buffer.from(JSON.stringify(definition)).toString('base64')}`
                               )
                           )
                   }
@@ -59,7 +59,7 @@ export async function configureMcp(client: AgentClient) {
         }
     ]
     const pick = await vscode.window.showQuickPick(picks, {
-        title: vscode.l10n.t('Tapline MCP server'),
+        title: vscode.l10n.t('Heimspy MCP server'),
         placeHolder: url
     })
     if (!pick) return

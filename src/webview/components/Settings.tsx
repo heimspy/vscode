@@ -329,8 +329,8 @@ export function Settings({ onClose, onRules }: { onClose(): void; onRules(): voi
                                         <div className="settings-proxy-actions">
                                             <p className="muted">
                                                 {zh
-                                                    ? 'VS Code 用户级代理，影响共用用户配置的窗口。跟随当前抓包端口，停止或退出时恢复原用户设置。移除仅清除用户级覆盖。HTTPS 解密需要信任 Tapline 根证书。'
-                                                    : 'VS Code user proxy, shared by windows using this profile. Follows the live capture port and restores the previous user setting on stop or exit. Remove clears only the user override. HTTPS decryption requires trusting the Tapline root certificate.'}
+                                                    ? 'VS Code 用户级代理，影响共用用户配置的窗口。跟随当前抓包端口，停止或退出时恢复原用户设置。移除仅清除用户级覆盖。HTTPS 解密需要信任 Heimspy 根证书。'
+                                                    : 'VS Code user proxy, shared by windows using this profile. Follows the live capture port and restores the previous user setting on stop or exit. Remove clears only the user override. HTTPS decryption requires trusting the Heimspy root certificate.'}
                                             </p>
                                             <p className="muted">
                                                 {proxy?.canSet

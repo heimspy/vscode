@@ -3,7 +3,7 @@ import { preferences } from './preferences'
 import * as vscode from 'vscode'
 import { writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
-import { toCurl, toHAR, type ComposeRequest, type Transaction } from '../shared/model'
+import { toCurl, toHAR, type ComposeRequest, type Transaction } from '@heimspy/agent/model'
 import { AgentClient } from './client'
 import { ComparisonDocuments } from './providers/comparisonDocuments'
 import { TransactionDocuments } from './providers/transactionDocuments'
@@ -17,12 +17,12 @@ import { configureMcp } from './commands/mcp'
 let client: AgentClient | undefined
 
 /** What `activate` returns; the end-to-end tests drive the extension through it. */
-export interface TaplineApi {
+export interface HeimspyApi {
     client: AgentClient
     setVSCodeProxy(enabled: boolean): Promise<void>
 }
 
-export async function activate(context: vscode.ExtensionContext): Promise<TaplineApi> {
+export async function activate(context: vscode.ExtensionContext): Promise<HeimspyApi> {
     await preferences.initialize(context)
     client = new AgentClient(context)
     const view = new TrafficView(client)
@@ -77,7 +77,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
             title: vscode.l10n.t('Export HAR'),
             defaultUri: vscode.Uri.joinPath(
                 vscode.workspace.workspaceFolders?.[0]?.uri ?? vscode.Uri.file(homedir()),
-                'tapline-session.har'
+                'heimspy-session.har'
             ),
             filters: { 'HTTP Archive': ['har'] }
         })
@@ -179,7 +179,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
         vscode.StatusBarAlignment.Left,
         50
     )
-    status.name = 'Tapline'
+    status.name = 'Heimspy'
     status.command = 'tapline.status'
     context.subscriptions.push(
         client,
@@ -199,19 +199,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
         void vscode.commands.executeCommand('setContext', 'tapline.running', client!.running)
         void vscode.commands.executeCommand('setContext', 'tapline.starting', !!starting)
         if (starting) {
-            status.text = '$(loading~spin) Tapline'
-            status.tooltip = vscode.l10n.t('Starting Tapline capture…')
+            status.text = '$(loading~spin) Heimspy'
+            status.tooltip = vscode.l10n.t('Starting Heimspy capture…')
         } else if (!client!.connected) {
-            status.text = '$(circle-slash) Tapline'
-            status.tooltip = vscode.l10n.t('Tapline capture agent is not connected')
+            status.text = '$(circle-slash) Heimspy'
+            status.tooltip = vscode.l10n.t('Heimspy capture agent is not connected')
         } else if (!client!.running) {
-            status.text = '$(circle-outline) Tapline'
+            status.text = '$(circle-outline) Heimspy'
             status.tooltip = vscode.l10n.t('Capture stopped · click to start')
         } else if (!client!.recording) {
-            status.text = `$(debug-pause) Tapline ${client!.port}`
+            status.text = `$(debug-pause) Heimspy ${client!.port}`
             status.tooltip = vscode.l10n.t('Capturing on port {0}, recording paused', client!.port)
         } else {
-            status.text = `$(broadcast) Tapline ${client!.port}`
+            status.text = `$(broadcast) Heimspy ${client!.port}`
             status.tooltip = vscode.l10n.t(
                 'Capturing on port {0} · {1} requests',
                 client!.port,
@@ -225,7 +225,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
 
     const failure = (error: unknown) =>
         vscode.window.showErrorMessage(
-            vscode.l10n.t('Tapline: {0}', error instanceof Error ? error.message : String(error))
+            vscode.l10n.t('Heimspy: {0}', error instanceof Error ? error.message : String(error))
         )
     const guarded =
         (fn: (...args: any[]) => unknown | Promise<unknown>) =>
@@ -254,7 +254,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
     const started = async () => {
         const choice = await vscode.window.showInformationMessage(
             vscode.l10n.t(
-                'Tapline is capturing on 127.0.0.1:{0}. New terminals and debug sessions are routed through it automatically.',
+                'Heimspy is capturing on 127.0.0.1:{0}. New terminals and debug sessions are routed through it automatically.',
                 client!.port
             ),
             vscode.l10n.t('New Captured Terminal'),
@@ -272,7 +272,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
             vscode.window.withProgress(
                 {
                     location: vscode.ProgressLocation.Notification,
-                    title: vscode.l10n.t('Starting Tapline capture…')
+                    title: vscode.l10n.t('Starting Heimspy capture…')
                 },
                 async () => {
                     try {
@@ -285,7 +285,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
                         // A dismissed/ignored notification must not keep Start disabled.
                         void vscode.window
                             .showErrorMessage(
-                                vscode.l10n.t('Tapline could not start capture: {0}', message),
+                                vscode.l10n.t('Heimspy could not start capture: {0}', message),
                                 vscode.l10n.t('Show Logs'),
                                 ...(/port/i.test(message) ? [vscode.l10n.t('Change Port')] : [])
                             )
@@ -313,7 +313,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
         await client!.stop()
         void vscode.window.showInformationMessage(
             vscode.l10n.t(
-                'Tapline capture stopped. Terminals opened from now on use the normal network.'
+                'Heimspy capture stopped. Terminals opened from now on use the normal network.'
             )
         )
     })
@@ -362,7 +362,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
                   },
             { label: `$(output) ${vscode.l10n.t('Show Logs')}`, run: () => client!.output.show() }
         ]
-        const pick = await vscode.window.showQuickPick(picks, { title: 'Tapline' })
+        const pick = await vscode.window.showQuickPick(picks, { title: 'Heimspy' })
         await pick?.run()
     })
     command('tapline.open', (node?: TrafficNode) => {
@@ -489,7 +489,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Taplin
     command('tapline.uninstallCertificate', () => certificate.uninstall())
     command('tapline.checkCertificate', async () => {
         await certificate.check()
-        void vscode.window.showInformationMessage(`Tapline: ${certificate.describe()}`)
+        void vscode.window.showInformationMessage(`Heimspy: ${certificate.describe()}`)
     })
     command('tapline.copyCertificatePath', async () => {
         if (!client!.connected) await client!.connect()

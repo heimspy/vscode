@@ -298,8 +298,8 @@ export const preferenceDescriptions: Record<string, { en: string; zh: string }> 
         zh: '每个方向保留的请求/响应体上限（KiB）。流量本身完整转发，超出部分标记为已截断。'
     },
     'terminal.profiles': {
-        en: 'Which sets of environment variables every new terminal gets besides the proxy variables (HTTP_PROXY, HTTPS_PROXY, NO_PROXY). Each name stands for the variables a runtime reads to trust the Tapline CA; the resolved variables are listed below. Keep this generic and use "New Captured Terminal" for a runtime-specific terminal.',
-        zh: '除代理变量（HTTP_PROXY、HTTPS_PROXY、NO_PROXY）外，每个新终端还要注入哪几组环境变量。每个名称代表某类运行时用来信任 Tapline CA 的一组变量，实际注入的变量见下方列表。建议保持通用，需要特定运行时时用"新建抓包终端"。'
+        en: 'Which sets of environment variables every new terminal gets besides the proxy variables (HTTP_PROXY, HTTPS_PROXY, NO_PROXY). Each name stands for the variables a runtime reads to trust the Heimspy CA; the resolved variables are listed below. Keep this generic and use "New Captured Terminal" for a runtime-specific terminal.',
+        zh: '除代理变量（HTTP_PROXY、HTTPS_PROXY、NO_PROXY）外，每个新终端还要注入哪几组环境变量。每个名称代表某类运行时用来信任 Heimspy CA 的一组变量，实际注入的变量见下方列表。建议保持通用，需要特定运行时时用"新建抓包终端"。'
     },
     'mcp.enabled': {
         en: 'Serve an MCP endpoint (http://127.0.0.1:<port>/mcp) so AI assistants such as Copilot, Claude Code and Cursor can read and replay captured traffic.',

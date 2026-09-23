@@ -1,4 +1,5 @@
 import { preferences } from './preferences'
+import { version as bundledAgentVersion } from '@heimspy/agent/package.json'
 import * as vscode from 'vscode'
 import { randomUUID } from 'node:crypto'
 import { spawn } from 'node:child_process'
@@ -6,8 +7,8 @@ import { createInterface } from 'node:readline'
 import { existsSync, statSync } from 'node:fs'
 import net from 'node:net'
 import { isAbsolute, join } from 'node:path'
-import { pipePath } from '../agent/paths'
-import type { Message, Request, Responses } from '../agent/protocol'
+import { pipePath } from '@heimspy/agent/paths'
+import type { Message, Request, Responses } from '@heimspy/agent/protocol'
 import {
     defaultSettings,
     type AgentState,
@@ -17,7 +18,7 @@ import {
     type Rule,
     type Settings,
     type Transaction
-} from '../shared/model'
+} from '@heimspy/agent/model'
 
 type Method = Request['method']
 type Args<M extends Method> = Omit<Extract<Request, { method: M }>, 'method'>
@@ -78,7 +79,7 @@ export class AgentClient implements vscode.Disposable {
     protoFiles: string[] = []
 
     constructor(private context: vscode.ExtensionContext) {
-        this.output = vscode.window.createOutputChannel('Tapline', { log: true })
+        this.output = vscode.window.createOutputChannel('Heimspy', { log: true })
         context.subscriptions.push(
             preferences.onDidChange((change) => {
                 if (change.affectsConfiguration('tapline') && this.socket)
@@ -177,7 +178,7 @@ export class AgentClient implements vscode.Disposable {
 
     /** Connect to a running agent or spawn one; resolves once the mirror is populated. */
     connect(): Promise<void> {
-        if (this.disposed) return Promise.reject(new Error('Tapline client is disposed'))
+        if (this.disposed) return Promise.reject(new Error('Heimspy client is disposed'))
         if (this.ready) return this.ready
         this.ready = this.establish().catch((error) => {
             this.socket?.destroy()
@@ -197,7 +198,7 @@ export class AgentClient implements vscode.Disposable {
     }
 
     private async establish(): Promise<void> {
-        if (this.disposed) throw new Error('Tapline client is disposed')
+        if (this.disposed) throw new Error('Heimspy client is disposed')
         const directory = this.context.globalStorageUri.fsPath
         const path = pipePath(directory)
         const socket = await this.openAgent(directory, path)
@@ -208,7 +209,7 @@ export class AgentClient implements vscode.Disposable {
             workspaceName: vscode.workspace.name
         })
         const build = this.build()
-        const version = this.context.extension?.packageJSON.version as string | undefined
+        const version = bundledAgentVersion
         if (needsAgentUpgrade(version, this.state, build)) {
             await this.upgrade(socket, directory)
             return
@@ -228,12 +229,12 @@ export class AgentClient implements vscode.Disposable {
             const deadline = Date.now() + 10000
             while (!socket) {
                 await new Promise((r) => setTimeout(r, 150))
-                if (this.disposed) throw new Error('Tapline client is disposed')
+                if (this.disposed) throw new Error('Heimspy client is disposed')
                 socket = await this.dial(path).catch(() => undefined)
                 if (!socket && Date.now() > deadline)
                     throw new Error(
                         vscode.l10n.t(
-                            'The Tapline capture agent did not start. See the Tapline output channel.'
+                            'The Heimspy capture agent did not start. See the Heimspy output channel.'
                         )
                     )
             }
@@ -390,7 +391,7 @@ export class AgentClient implements vscode.Disposable {
             if (!this.upgrading) this.ready = undefined
             for (const waiter of this.pending.values())
                 waiter.reject(
-                    new Error(vscode.l10n.t('Lost connection to the Tapline capture agent'))
+                    new Error(vscode.l10n.t('Lost connection to the Heimspy capture agent'))
                 )
             this.pending.clear()
             this.state = { ...this.state, running: false, clients: 0 }
@@ -446,7 +447,7 @@ export class AgentClient implements vscode.Disposable {
         const socket = this.socket
         if (!socket || socket.destroyed)
             return Promise.reject(
-                new Error(vscode.l10n.t('Lost connection to the Tapline capture agent'))
+                new Error(vscode.l10n.t('Lost connection to the Heimspy capture agent'))
             )
         const id = ++this.sequence
         return new Promise<Responses[M]>((resolve, reject) => {
@@ -457,7 +458,7 @@ export class AgentClient implements vscode.Disposable {
                 : setTimeout(() => {
                       const error = new Error(
                           vscode.l10n.t(
-                              'Tapline capture agent timed out while handling {0}. See the Tapline output channel.',
+                              'Heimspy capture agent timed out while handling {0}. See the Heimspy output channel.',
                               method
                           )
                       )

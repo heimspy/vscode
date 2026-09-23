@@ -36,7 +36,7 @@ export function AdvancedBody({
     const updateParts = (next: UploadPart[]) => {
         generation.current++
         const bodyDraft = { ...draft, parts: next }
-        const boundary = `----Tapline${crypto.randomUUID().replace(/-/g, '')}`
+        const boundary = `----Heimspy${crypto.randomUUID().replace(/-/g, '')}`
         try {
             latestOnChange.current(
                 { body: multipartBody(next, boundary), bodyEncoding: 'base64', bodyDraft },

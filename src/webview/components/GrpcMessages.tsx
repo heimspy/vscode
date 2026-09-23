@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { bytes, type GrpcInfo, type GrpcMessage } from '../../shared/model'
+import { bytes, type GrpcInfo, type GrpcMessage } from '@heimspy/agent/model'
 import { t } from '../lib/i18n'
 import { tokenize } from '../lib/jsonHighlight'
 import { grpcText } from '../lib/messages'
