@@ -14,10 +14,10 @@ The fork cache is under `.build/sing-box/<sha>`; no embedded source or submodule
 
 Agent has its own `sing-box.lock.json` for integration tests. Its `test:core` script
 builds a local fixture only, not distribution artifacts. It has no dependency on
-vscode or the removed core repository. Active builds fetch the sing-box fork directly.
+vscode or the retired core repository. Active builds fetch the sing-box fork directly.
 
 The display name is Heimspy; extension ID `fqix.tapline`, command/setting/view IDs
-and existing CA storage are preserved. Agent and extension versions are independent.
+are preserved. Linux trust-store certificate filenames use `heimspy-root-ca`. Agent and extension versions are independent.
 
 ## Updating
 
@@ -36,7 +36,7 @@ Restore using `npm ci --ignore-scripts`.
 
 Relevant Git history was extracted from `heimspy/heimspy` at `7478a34`; the original
 repository retains the complete history and old tags. The native build script was
-subsequently migrated from core to vscode; the separate core repository was removed.
+subsequently migrated from core to vscode; the separate core repository is no longer used.
 
 Store publication requires the vscode repository's `marketplace-publish` environment,
 `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `OVSX_PAT` and the corresponding Azure federated

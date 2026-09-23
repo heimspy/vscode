@@ -35,12 +35,12 @@ def print_snippet(body_bytes: bytes) -> None:
 
 
 def run_get(base_url: str, ssl_ctx: ssl.SSLContext) -> None:
-    url = f"{base_url}/get?lang=python&sample=tapline"
+    url = f"{base_url}/get?lang=python&sample=heimspy"
     print(f"--> GET {url}")
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "tapline-python-example/1.0",
+            "User-Agent": "heimspy-python-example/1.0",
             "Accept": "application/json",
         },
         method="GET",
@@ -58,7 +58,7 @@ def run_get(base_url: str, ssl_ctx: ssl.SSLContext) -> None:
 def run_post(base_url: str, ssl_ctx: ssl.SSLContext) -> None:
     url = f"{base_url}/post"
     payload = {
-        "client": "tapline-python",
+        "client": "heimspy-python",
         "action": "create",
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
@@ -69,7 +69,7 @@ def run_post(base_url: str, ssl_ctx: ssl.SSLContext) -> None:
         url,
         data=data,
         headers={
-            "User-Agent": "tapline-python-example/1.0",
+            "User-Agent": "heimspy-python-example/1.0",
             "Content-Type": "application/json",
             "Accept": "application/json",
         },
@@ -91,7 +91,7 @@ def run_delete(base_url: str, ssl_ctx: ssl.SSLContext) -> None:
     req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "tapline-python-example/1.0",
+            "User-Agent": "heimspy-python-example/1.0",
             "Accept": "application/json",
         },
         method="DELETE",

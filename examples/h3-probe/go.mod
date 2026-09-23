@@ -1,4 +1,4 @@
-module tapline/examples/h3-probe
+module github.com/heimspy/vscode/examples/h3-probe
 
 go 1.25
 

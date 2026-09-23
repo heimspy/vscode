@@ -159,7 +159,7 @@ describe('system trust store', () => {
             const { runner, shells } = fake('linux')
             // The script is quoted for sh, so use a path without backslashes even on Windows.
             const store = systemTrustStore('/tmp/ca.pem', runner, undefined, () => true)
-            expect(store.location).toBe('/usr/local/share/ca-certificates/tapline-root-ca.crt')
+            expect(store.location).toBe('/usr/local/share/ca-certificates/heimspy-root-ca.crt')
             await store.trust()
             expect(shells[0].file).toBe('sudo')
             expect(shells[0].args.slice(0, 2)).toEqual(['sh', '-c'])
@@ -178,7 +178,7 @@ describe('system trust store', () => {
                 undefined,
                 (path) => path === '/etc/pki/ca-trust/source/anchors'
             )
-            expect(store.location).toBe('/etc/pki/ca-trust/source/anchors/tapline-root-ca.pem')
+            expect(store.location).toBe('/etc/pki/ca-trust/source/anchors/heimspy-root-ca.pem')
             await expect(store.install()).rejects.toThrow(/exit 1/)
             expect(shells[0].file).toBe('sh')
         })

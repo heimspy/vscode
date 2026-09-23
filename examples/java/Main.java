@@ -71,7 +71,7 @@ public class Main {
             }
             KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
             ks.load(null, null);
-            ks.setCertificateEntry("tapline-ca", caCert);
+            ks.setCertificateEntry("heimspy-ca", caCert);
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ks);
@@ -106,12 +106,12 @@ public class Main {
     }
 
     private static void runGet(HttpClient client, String baseUrl) {
-        String url = baseUrl + "/get?lang=java&sample=tapline";
+        String url = baseUrl + "/get?lang=java&sample=heimspy";
         System.out.println("--> GET " + url);
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("User-Agent", "tapline-java-example/1.0")
+                .header("User-Agent", "heimspy-java-example/1.0")
                 .header("Accept", "application/json")
                 .timeout(Duration.ofSeconds(15))
                 .GET()
@@ -128,12 +128,12 @@ public class Main {
 
     private static void runPost(HttpClient client, String baseUrl) {
         String url = baseUrl + "/post";
-        String payload = String.format("{\"client\":\"tapline-java\",\"action\":\"create\",\"timestamp\":\"%s\"}", Instant.now());
+        String payload = String.format("{\"client\":\"heimspy-java\",\"action\":\"create\",\"timestamp\":\"%s\"}", Instant.now());
         System.out.printf("--> POST %s (json body: %s)%n", url, payload);
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("User-Agent", "tapline-java-example/1.0")
+                .header("User-Agent", "heimspy-java-example/1.0")
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .timeout(Duration.ofSeconds(15))
@@ -155,7 +155,7 @@ public class Main {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("User-Agent", "tapline-java-example/1.0")
+                .header("User-Agent", "heimspy-java-example/1.0")
                 .header("Accept", "application/json")
                 .timeout(Duration.ofSeconds(15))
                 .DELETE()

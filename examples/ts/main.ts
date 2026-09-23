@@ -58,13 +58,13 @@ async function configureProxyIfAvailable(): Promise<void> {
 }
 
 async function runGet(baseUrl: string): Promise<void> {
-    const url = `${baseUrl}/get?lang=ts&sample=tapline`
+    const url = `${baseUrl}/get?lang=ts&sample=heimspy`
     console.log(`--> GET ${url}`)
     try {
         const resp = await fetch(url, {
             method: 'GET',
             headers: {
-                'User-Agent': 'tapline-ts-example/1.0',
+                'User-Agent': 'heimspy-ts-example/1.0',
                 Accept: 'application/json'
             }
         })
@@ -80,7 +80,7 @@ async function runGet(baseUrl: string): Promise<void> {
 async function runPost(baseUrl: string): Promise<void> {
     const url = `${baseUrl}/post`
     const payload = {
-        client: 'tapline-ts',
+        client: 'heimspy-ts',
         action: 'create',
         timestamp: new Date().toISOString()
     }
@@ -91,7 +91,7 @@ async function runPost(baseUrl: string): Promise<void> {
         const resp = await fetch(url, {
             method: 'POST',
             headers: {
-                'User-Agent': 'tapline-ts-example/1.0',
+                'User-Agent': 'heimspy-ts-example/1.0',
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
@@ -113,7 +113,7 @@ async function runDelete(baseUrl: string): Promise<void> {
         const resp = await fetch(url, {
             method: 'DELETE',
             headers: {
-                'User-Agent': 'tapline-ts-example/1.0',
+                'User-Agent': 'heimspy-ts-example/1.0',
                 Accept: 'application/json'
             }
         })

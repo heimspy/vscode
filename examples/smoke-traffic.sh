@@ -6,7 +6,7 @@
 #
 # Run it from a VS Code terminal opened while capture is on — Heimspy injects
 # HTTP(S)_PROXY and the CA variables there. Elsewhere, set them by hand:
-#   HTTPS_PROXY=http://127.0.0.1:3606 SSL_CERT_FILE=/path/to/tapline-ca.pem examples/smoke-traffic.sh
+#   HTTPS_PROXY=http://127.0.0.1:3606 SSL_CERT_FILE=/path/to/heimspy-ca.pem examples/smoke-traffic.sh
 #
 # Needs curl; the gRPC part needs grpcurl (brew install grpcurl) and is skipped otherwise.
 set -u
@@ -47,17 +47,17 @@ step() {
 }
 
 echo "== Plain HTTP"
-step "GET  /get"                      "$HTTPBIN_PLAIN/get?source=tapline&n=1"
-step "POST /post (json)"              -H 'Content-Type: application/json' -d '{"hello":"tapline","n":1}' "$HTTPBIN_PLAIN/post"
+step "GET  /get"                      "$HTTPBIN_PLAIN/get?source=heimspy&n=1"
+step "POST /post (json)"              -H 'Content-Type: application/json' -d '{"hello":"heimspy","n":1}' "$HTTPBIN_PLAIN/post"
 
 echo "== HTTPS / HTTP/2"
 step "GET  /get (http/1.1)"           --http1.1 "$HTTPBIN/get?proto=h1"
 step "GET  /get (http/2)"             --http2 "$HTTPBIN/get?proto=h2"
 step "GET  /headers"                  -H 'X-Heimspy: smoke' -H 'Accept: application/json' "$HTTPBIN/headers"
-step "GET  /user-agent"               -A 'tapline-smoke/1.0' "$HTTPBIN/user-agent"
+step "GET  /user-agent"               -A 'heimspy-smoke/1.0' "$HTTPBIN/user-agent"
 
 echo "== Methods and bodies"
-step "POST /post (form)"              -d 'name=tapline&lang=zh-cn' "$HTTPBIN/post"
+step "POST /post (form)"              -d 'name=heimspy&lang=zh-cn' "$HTTPBIN/post"
 step "POST /post (multipart)"         -F 'field=value' -F 'file=@/etc/hosts;filename=hosts.txt' "$HTTPBIN/post"
 step "PUT  /put (json)"               -X PUT -H 'Content-Type: application/json' -d '{"id":42,"tags":["a","b"],"nested":{"ok":true,"none":null}}' "$HTTPBIN/put"
 step "PATCH /patch"                   -X PATCH -H 'Content-Type: application/json' -d '{"op":"replace"}' "$HTTPBIN/patch"
@@ -94,9 +94,9 @@ echo "== Cookies, auth, cache"
 step "GET  /cookies/set"              -L -c /dev/null "$HTTPBIN/cookies/set?session=abc123&theme=dark"
 step "GET  /cookies (sent)"           -b 'session=abc123; theme=dark' "$HTTPBIN/cookies"
 step "GET  /basic-auth"               -u 'user:passwd' "$HTTPBIN/basic-auth/user/passwd"
-step "GET  /bearer"                   -H 'Authorization: Bearer tapline-token' "$HTTPBIN/bearer"
+step "GET  /bearer"                   -H 'Authorization: Bearer heimspy-token' "$HTTPBIN/bearer"
 step "GET  /cache (304)"              -H 'If-None-Match: "any"' "$HTTPBIN/cache"
-step "GET  /etag"                     "$HTTPBIN/etag/tapline-etag"
+step "GET  /etag"                     "$HTTPBIN/etag/heimspy-etag"
 step "GET  /response-headers"         "$HTTPBIN/response-headers?X-Custom=1&Content-Type=text/plain"
 
 echo "== Timing and streams"
@@ -126,13 +126,13 @@ if command -v grpcurl >/dev/null 2>&1; then
         fi
         sleep "$PAUSE"
     }
-    gstep "plain  hello.HelloService/SayHello"  -plaintext -d '{"greeting":"tapline"}' "$GRPCBIN_PLAIN" hello.HelloService/SayHello
-    gstep "tls    hello.HelloService/SayHello"  "${ca[@]}" -d '{"greeting":"tapline"}' "$GRPCBIN_TLS" hello.HelloService/SayHello
+    gstep "plain  hello.HelloService/SayHello"  -plaintext -d '{"greeting":"heimspy"}' "$GRPCBIN_PLAIN" hello.HelloService/SayHello
+    gstep "tls    hello.HelloService/SayHello"  "${ca[@]}" -d '{"greeting":"heimspy"}' "$GRPCBIN_TLS" hello.HelloService/SayHello
     gstep "tls    addsvc.Add/Sum"               "${ca[@]}" -d '{"a":2,"b":40}' "$GRPCBIN_TLS" addsvc.Add/Sum
     gstep "tls    addsvc.Add/Concat"            "${ca[@]}" -d '{"a":"tap","b":"line"}' "$GRPCBIN_TLS" addsvc.Add/Concat
     gstep "tls    grpcbin.GRPCBin/Index"        "${ca[@]}" "$GRPCBIN_TLS" grpcbin.GRPCBin/Index
     gstep "tls    grpcbin.GRPCBin/DummyUnary"   "${ca[@]}" -d '{"f_string":"x","f_int32":7,"f_strings":["a","b"]}' "$GRPCBIN_TLS" grpcbin.GRPCBin/DummyUnary
-    gstep "tls    GRPCBin/HeadersUnary"         "${ca[@]}" -H 'x-tapline: smoke' "$GRPCBIN_TLS" grpcbin.GRPCBin/HeadersUnary
+    gstep "tls    GRPCBin/HeadersUnary"         "${ca[@]}" -H 'x-heimspy: smoke' "$GRPCBIN_TLS" grpcbin.GRPCBin/HeadersUnary
     gstep "tls    GRPCBin/Empty"                "${ca[@]}" "$GRPCBIN_TLS" grpcbin.GRPCBin/Empty
     gstep "tls    reflection list"              "${ca[@]}" "$GRPCBIN_TLS" list
     # Calls that end with a non-OK grpc-status on purpose, to see status handling.
@@ -173,7 +173,7 @@ if command -v go >/dev/null 2>&1; then
     proxy=${proxy#*://}
     proxy=${proxy%/}
     if [[ ! -f $H3_PROBE/main.go ]]; then
-        echo "  h3-probe not found at $H3_PROBE — set H3_PROBE=/path/to/tapline/examples/h3-probe"
+        echo "  h3-probe not found at $H3_PROBE — set H3_PROBE=/path/to/heimspy/examples/h3-probe"
         ((fail++))
     elif (cd "$H3_PROBE" && go run . -proxy "$proxy" \
         https://cloudflare-quic.com/ \

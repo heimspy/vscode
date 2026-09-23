@@ -73,12 +73,12 @@ func main() {
 }
 
 func runGet(ctx context.Context, client *http.Client, baseURL string) error {
-	url := fmt.Sprintf("%s/get?lang=go&sample=tapline", baseURL)
+	url := fmt.Sprintf("%s/get?lang=go&sample=heimspy", baseURL)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
-	req.Header.Set("User-Agent", "tapline-go-example/1.0")
+	req.Header.Set("User-Agent", "heimspy-go-example/1.0")
 	req.Header.Set("Accept", "application/json")
 
 	fmt.Printf("--> GET %s\n", url)
@@ -98,7 +98,7 @@ func runGet(ctx context.Context, client *http.Client, baseURL string) error {
 func runPost(ctx context.Context, client *http.Client, baseURL string) error {
 	url := fmt.Sprintf("%s/post", baseURL)
 	payload := map[string]any{
-		"client":    "tapline-go",
+		"client":    "heimspy-go",
 		"action":    "create",
 		"timestamp": time.Now().UTC().Format(time.RFC3339),
 	}
@@ -112,7 +112,7 @@ func runPost(ctx context.Context, client *http.Client, baseURL string) error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "tapline-go-example/1.0")
+	req.Header.Set("User-Agent", "heimspy-go-example/1.0")
 
 	fmt.Printf("--> POST %s (json body: %s)\n", url, string(data))
 	resp, err := client.Do(req)
@@ -134,7 +134,7 @@ func runDelete(ctx context.Context, client *http.Client, baseURL string) error {
 	if err != nil {
 		return err
 	}
-	req.Header.Set("User-Agent", "tapline-go-example/1.0")
+	req.Header.Set("User-Agent", "heimspy-go-example/1.0")
 	req.Header.Set("Accept", "application/json")
 
 	fmt.Printf("--> DELETE %s\n", url)

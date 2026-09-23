@@ -141,17 +141,17 @@ function windows(certificate: string, runner: Runner): TrustStore {
 export const LINUX_ANCHORS = [
     {
         directory: '/usr/local/share/ca-certificates',
-        file: 'tapline-root-ca.crt',
+        file: 'heimspy-root-ca.crt',
         update: 'update-ca-certificates'
     },
     {
         directory: '/etc/pki/ca-trust/source/anchors',
-        file: 'tapline-root-ca.pem',
+        file: 'heimspy-root-ca.pem',
         update: 'update-ca-trust'
     },
     {
         directory: '/etc/ca-certificates/trust-source/anchors',
-        file: 'tapline-root-ca.pem',
+        file: 'heimspy-root-ca.pem',
         update: 'trust extract-compat'
     }
 ] as const
